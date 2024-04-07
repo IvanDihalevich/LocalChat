@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qHtzdZoQ6ACYaCz+1F7SQVXFyrAVaVHYUWGoJtGgHol6P3FHGQZdRTJCll7r23f3dIbC1QQksIZaDYsYMJnyQQ==",
+  "dgSpecHash": "tCuWwGsdt/Mye6siKs6jn5J+MO1ffbeqkBAqb4HcTx4fsGNfReOID/qddLMl7h90GF9d3JM1EcBjmXF9lSRGwA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.Core\\LocalChat.Core.csproj",
+  "projectFilePath": "C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\LocalChat.Core\\LocalChat.Core.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
