@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj": {}
+    "C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj": {
+    "C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj",
         "projectName": "LocalChat.Repository",
-        "projectPath": "C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj",
-        "packagesPath": "C:\\Users\\Kripa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\obj\\",
+        "projectPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\LocalChat.Repository.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\src\\LocalChat\\LocalChat.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Kripa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
