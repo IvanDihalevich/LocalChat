@@ -7,3 +7,5 @@ API.NET_Project/.vs/LocalChat/vs/
 /src/LocalChat/LocalChat.UI/bin
 /src/LocalChat/LocalChat.Repository.bin
 /src/LocalChat/LocalChat.Repository.obj
+/src/LocalChat/LocalChat.Repository/obj
+/src/LocalChat/LocalChat.Repository/bin
