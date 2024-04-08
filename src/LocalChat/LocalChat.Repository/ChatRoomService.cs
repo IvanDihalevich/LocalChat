@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LocalChat.Repository
 {
-    internal class ChatRoomService
+    public class ChatRoomService
     {
+        
     }
 }
