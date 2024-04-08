@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace LocalChat.Core.Entities
 {
-    public class ChatRoom : IEntity<Guid>
+    public class MessedgeUsers : IEntity<Guid>
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public List<Message>? Messages { get; set; }
+        public List <Message>? MessageId { get; set; }
+        public User Receiver { get; set; }
+        
     }
 }

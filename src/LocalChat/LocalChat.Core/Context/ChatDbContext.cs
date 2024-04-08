@@ -18,6 +18,9 @@ namespace LocalChat.Core.Context
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<MessedgeUsers> messedgeUsers { get; set; }
+        public DbSet<ChatRoomUsers> ChatRoomUsers { get; set; }
+       
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -22,21 +22,6 @@ namespace LocalChat.Core.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ChatRoomUser", b =>
-                {
-                    b.Property<Guid>("ChatRoomsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ChatRoomsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("ChatRoomUser");
-                });
-
             modelBuilder.Entity("LocalChat.Core.Entities.ChatRoom", b =>
                 {
                     b.Property<Guid>("Id")
@@ -52,6 +37,27 @@ namespace LocalChat.Core.Migrations
                     b.ToTable("ChatRooms");
                 });
 
+            modelBuilder.Entity("LocalChat.Core.Entities.ChatRoomUsers", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("chatRoomIdId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("chatRoomIdId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("ChatRoomUsers");
+                });
+
             modelBuilder.Entity("LocalChat.Core.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -61,14 +67,14 @@ namespace LocalChat.Core.Migrations
                     b.Property<Guid?>("ChatRoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("MessedgeUsersId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("SendTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SenderIdId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -78,7 +84,27 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("ChatRoomId");
 
+                    b.HasIndex("MessedgeUsersId");
+
+                    b.HasIndex("SenderIdId");
+
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.ToTable("messedgeUsers");
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.User", b =>
@@ -104,19 +130,23 @@ namespace LocalChat.Core.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ChatRoomUser", b =>
+            modelBuilder.Entity("LocalChat.Core.Entities.ChatRoomUsers", b =>
                 {
-                    b.HasOne("LocalChat.Core.Entities.ChatRoom", null)
+                    b.HasOne("LocalChat.Core.Entities.ChatRoom", "chatRoomId")
                         .WithMany()
-                        .HasForeignKey("ChatRoomsId")
+                        .HasForeignKey("chatRoomIdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LocalChat.Core.Entities.User", null)
+                    b.HasOne("LocalChat.Core.Entities.User", "user")
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("chatRoomId");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.Message", b =>
@@ -124,11 +154,39 @@ namespace LocalChat.Core.Migrations
                     b.HasOne("LocalChat.Core.Entities.ChatRoom", null)
                         .WithMany("Messages")
                         .HasForeignKey("ChatRoomId");
+
+                    b.HasOne("LocalChat.Core.Entities.MessedgeUsers", null)
+                        .WithMany("MessageId")
+                        .HasForeignKey("MessedgeUsersId");
+
+                    b.HasOne("LocalChat.Core.Entities.User", "SenderId")
+                        .WithMany()
+                        .HasForeignKey("SenderIdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SenderId");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>
+                {
+                    b.HasOne("LocalChat.Core.Entities.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.ChatRoom", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>
+                {
+                    b.Navigation("MessageId");
                 });
 #pragma warning restore 612, 618
         }
