@@ -1,0 +1,14 @@
+﻿<!-- Delete.cshtml -->
+@model LocalChat.Core.Entities.ChatRoom
+
+<h1>Delete Chat Room</h1>
+
+<h3>Are you sure you want to delete this room?</h3>
+<div>
+    <h4>Name: @Model.Name</h4>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

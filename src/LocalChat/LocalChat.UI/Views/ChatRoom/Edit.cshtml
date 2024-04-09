@@ -1,0 +1,14 @@
+﻿<!-- Edit.cshtml -->
+@model LocalChat.Core.Entities.ChatRoom
+
+<h1>Edit Chat Room</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
