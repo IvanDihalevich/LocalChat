@@ -1,0 +1,22 @@
+﻿<!-- Details.cshtml -->
+@model LocalChat.Core.Entities.ChatRoom
+
+<h1>Chat Room Details</h1>
+
+<div>
+    <h4>Name: @Model.Name</h4>
+    <h4>Messages:</h4>
+    <ul>
+        @if (Model.Messages != null)
+        {
+            foreach (var message in Model.Messages)
+            {
+                <li>@message.Text</li>
+            }
+        }
+        else
+        {
+            <li>No messages</li>
+        }
+    </ul>
+</div>

@@ -4,7 +4,7 @@ using LocalChat.Core.Context;
 using LocalChat.Core.Entities;
 using LocalChat.Repository;
 
-namespace Services
+namespace LocalChat.Repository
 {
     public class ChatRoomService : IChatRoomService
     {

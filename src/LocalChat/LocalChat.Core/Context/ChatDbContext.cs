@@ -10,6 +10,8 @@ using LocalChat.Core.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.Reflection.Emit;
+
 
 namespace LocalChat.Core.Context
 {
@@ -20,7 +22,16 @@ namespace LocalChat.Core.Context
         public DbSet<User> Users { get; set; }
         public DbSet<MessedgeUsers> messedgeUsers { get; set; }
         public DbSet<ChatRoomUsers> ChatRoomUsers { get; set; }
-       
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            DataSeed.Seed(builder);
+        }
+        public ChatDbContext(DbContextOptions<ChatDbContext> options)
+         : base(options)
+        { }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

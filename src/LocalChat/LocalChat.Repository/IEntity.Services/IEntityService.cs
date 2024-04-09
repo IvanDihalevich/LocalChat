@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace LocalChat.Repository.IEntity.Services
 {
-    public interface IEntityService<T, TKey>
-        where T : IEntity<TKey>
+    public interface IEntityService<TEntity, TKey>
+        where TEntity : IEntity<TKey>
     {
-        void AddEntity(T entity);
-        void UpdateEntity(T entity);
+        void AddEntity(TEntity entity);
+        void UpdateEntity(TEntity entity);
         void DeleteEntity(TKey entityId);
-        T GetEntityById(TKey entityId);
-        List<T> GetAllEntities();
+        TEntity GetEntityById(TKey entityId);
+        List<TEntity> GetAllEntities();
     }
 }
