@@ -34,3 +34,9 @@ C:\Users\Lenovo\Documents\GitHub\LocalChat\LocalChat\src\LocalChat\src\LocalChat
 C:\Users\Lenovo\Documents\GitHub\LocalChat\LocalChat\src\LocalChat\src\LocalChat\LocalChat.Repository\obj\Debug\net8.0\refint\LocalChat.Repository.dll
 C:\Users\Lenovo\Documents\GitHub\LocalChat\LocalChat\src\LocalChat\src\LocalChat\LocalChat.Repository\obj\Debug\net8.0\LocalChat.Repository.pdb
 C:\Users\Lenovo\Documents\GitHub\LocalChat\LocalChat\src\LocalChat\src\LocalChat\LocalChat.Repository\obj\Debug\net8.0\ref\LocalChat.Repository.dll
+C:\Users\Kripa\Documents\GitHub\LocalChat\src\LocalChat\LocalChat.Repository\bin\Debug\net8.0\LocalChat.Repository.runtimeconfig.json
+C:\Users\Kripa\Documents\GitHub\LocalChat\src\LocalChat\LocalChat.Repository\bin\Debug\net8.0\LocalChat.Core.dll
+C:\Users\Kripa\Documents\GitHub\LocalChat\src\LocalChat\LocalChat.Repository\bin\Debug\net8.0\LocalChat.Core.pdb
+C:\Users\Kripa\Documents\GitHub\LocalChat\src\LocalChat\LocalChat.Repository\obj\Debug\net8.0\LocalChat.Repository.csproj.AssemblyReference.cache
+C:\Users\Kripa\Documents\GitHub\LocalChat\src\LocalChat\LocalChat.Repository\obj\Debug\net8.0\LocalChat.Repository.csproj.CopyComplete
+C:\Users\Kripa\Documents\GitHub\LocalChat\src\LocalChat\LocalChat.Repository\obj\Debug\net8.0\LocalChat.Repository.genruntimeconfig.cache

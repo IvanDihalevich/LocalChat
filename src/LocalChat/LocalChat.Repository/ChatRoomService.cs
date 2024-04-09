@@ -53,5 +53,9 @@ namespace Services
                 _dbContext.SaveChanges();
             }
         }
+        public bool ChatRoomExists(Guid id)
+        {
+            return _dbContext.ChatRooms.Any(c => c.Id == id);
+        }
     }
 }

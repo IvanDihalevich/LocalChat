@@ -1,4 +1,6 @@
-﻿using LocalChat.Core.Entities;
+﻿using LocalChat.Core.Context;
+using LocalChat.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,14 @@ namespace LocalChat.Repository
     public class UserService : IUserService
     {
         private List<User> _users;
+        private readonly ChatDbContext _dbContext;
 
-        public UserService()
+        public UserService(ChatDbContext dbContext)
         {
+            _dbContext = dbContext;
             _users = new List<User>();
         }
+
 
         public void AddUser(User user)
         {
@@ -48,6 +53,11 @@ namespace LocalChat.Repository
         {
             // Отримати всіх користувачів
             return _users;
+        }
+        public bool UserExists(Guid id)
+        {
+            // Реалізація перевірки існування користувача за ідентифікатором
+            return _dbContext.Users.Any(u => u.Id == id);
         }
     }
 }

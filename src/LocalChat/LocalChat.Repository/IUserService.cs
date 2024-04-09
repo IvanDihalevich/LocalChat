@@ -14,5 +14,6 @@ namespace LocalChat.Repository
         void DeleteUser(Guid userId);
         User GetUserById(Guid userId);
         List<User> GetAllUsers();
+        bool UserExists(Guid id);
     }
 }
