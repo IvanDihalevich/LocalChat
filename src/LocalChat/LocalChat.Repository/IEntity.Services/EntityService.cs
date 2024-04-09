@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace LocalChat.Repository.IEntity.Services
 {
-    public class EntityService<T, TKey> : IEntityService<T, TKey>
-        where T : IEntity<TKey>
+    public class EntityService<TEntity, TKey> : IEntityService<TEntity, TKey>
+        where TEntity : IEntity<TKey>
     {
-        private List<T> _entities;
+        private List<TEntity> _entities;
 
         public EntityService()
         {
-            _entities = new List<T>();
+            _entities = new List<TEntity>();
         }
 
-        public void AddEntity(T entity)
+        public void AddEntity(TEntity entity)
         {
             _entities.Add(entity);
         }
 
-        public void UpdateEntity(T entity)
+        public void UpdateEntity(TEntity entity)
         {
             var existingEntity = _entities.FirstOrDefault(e => e.Id.Equals(entity.Id));
             if (existingEntity != null)
@@ -41,12 +41,12 @@ namespace LocalChat.Repository.IEntity.Services
             }
         }
 
-        public T GetEntityById(TKey entityId)
+        public TEntity GetEntityById(TKey entityId)
         {
             return _entities.FirstOrDefault(e => e.Id.Equals(entityId));
         }
 
-        public List<T> GetAllEntities()
+        public List<TEntity> GetAllEntities()
         {
             return _entities.ToList();
         }

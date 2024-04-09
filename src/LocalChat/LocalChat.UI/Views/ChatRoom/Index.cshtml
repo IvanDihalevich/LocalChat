@@ -1,0 +1,19 @@
+﻿@model IEnumerable<LocalChat.Core.Entities.ChatRoom>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model)
+        {
+            <tr>
+                <td>@room.Id</td>
+                <td>@room.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
