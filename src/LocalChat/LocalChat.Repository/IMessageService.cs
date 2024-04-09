@@ -13,5 +13,9 @@ namespace LocalChat.Repository
         Message GetMessageById(Guid messageId);
         List<Message> GetMessagesBySenderId(Guid senderId);
         List<Message> GetMessagesBySendTime(DateTime sendTime);
+        void UpdateMessage(Message message);
+        bool MessageExists(Guid id);
+        void DeleteMessage(Guid id);
+        IQueryable<Message> GetAllMessages();
     }
 }

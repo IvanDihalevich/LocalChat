@@ -11,5 +11,6 @@ namespace LocalChat.Repository
         List<ChatRoom> GetAllChatRooms();
         void UpdateChatRoom(ChatRoom updatedChatRoom);
         void DeleteChatRoom(Guid chatRoomId);
+        bool ChatRoomExists(Guid id);
     }
 }

@@ -28,7 +28,7 @@ namespace LocalChat.Core.Context
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile("C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.UI\\appsettings.json")
                     .Build();
 
                 string connectionString = configuration.GetConnectionString("DefaultConnection");
