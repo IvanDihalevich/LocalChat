@@ -33,19 +33,19 @@ namespace LocalChat.Core.Context
         { }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("C:\\Users\\Kripa\\Documents\\GitHub\\LocalChat\\src\\LocalChat\\LocalChat.UI\\appsettings.json")
-                    .Build();
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        IConfigurationRoot configuration = new ConfigurationBuilder()
+        //            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+        //            .AddJsonFile("C:\\Users\\Lenovo\\Documents\\GitHub\\LocalChat\\LocalChat\\src\\LocalChat\\src\\LocalChat\\LocalChat.UI\\appsettings.json")
+        //            .Build();
 
-                string connectionString = configuration.GetConnectionString("DefaultConnection");
-                optionsBuilder.UseSqlServer(connectionString);
-            }
-        }
+        //        string connectionString = configuration.GetConnectionString("DefaultConnection");
+        //        optionsBuilder.UseSqlServer(connectionString);
+        //    }
+        //}
 
 
     }

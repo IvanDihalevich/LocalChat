@@ -14,6 +14,7 @@ namespace LocalChat.Repository
         {
             services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
             services.AddScoped<IChatRoomService, ChatRoomService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

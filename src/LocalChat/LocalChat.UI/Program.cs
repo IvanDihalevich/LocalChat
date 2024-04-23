@@ -1,6 +1,5 @@
 using LocalChat.Core.Context;
 using LocalChat.Repository;
-using LocalChat.UI.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

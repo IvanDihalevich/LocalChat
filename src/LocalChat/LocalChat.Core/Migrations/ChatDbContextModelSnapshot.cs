@@ -35,6 +35,18 @@ namespace LocalChat.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChatRooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3a2de186-e394-4d1a-ac2d-dc04ffa07582"),
+                            Name = "General"
+                        },
+                        new
+                        {
+                            Id = new Guid("9be87dbd-97d1-4cd3-83f2-4da9ceb129e4"),
+                            Name = "Random"
+                        });
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.ChatRoomUsers", b =>
@@ -128,6 +140,22 @@ namespace LocalChat.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f3c796fa-2e94-40ac-afce-77b32f853b02"),
+                            Email = "user1@example.com",
+                            Name = "user1@example.com",
+                            Password = "USER1@EXAMPLE.COM"
+                        },
+                        new
+                        {
+                            Id = new Guid("fb63dfde-1a61-4a52-85f9-bea776b4a9b5"),
+                            Email = "user2@example.com",
+                            Name = "user2@example.com",
+                            Password = "USER2@EXAMPLE.COM"
+                        });
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.ChatRoomUsers", b =>

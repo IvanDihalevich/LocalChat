@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Init1 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -110,6 +112,24 @@ namespace LocalChat.Core.Migrations
                         column: x => x.MessedgeUsersId,
                         principalTable: "messedgeUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "ChatRooms",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("3a2de186-e394-4d1a-ac2d-dc04ffa07582"), "General" },
+                    { new Guid("9be87dbd-97d1-4cd3-83f2-4da9ceb129e4"), "Random" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "Name", "Password" },
+                values: new object[,]
+                {
+                    { new Guid("f3c796fa-2e94-40ac-afce-77b32f853b02"), "user1@example.com", "user1@example.com", "USER1@EXAMPLE.COM" },
+                    { new Guid("fb63dfde-1a61-4a52-85f9-bea776b4a9b5"), "user2@example.com", "user2@example.com", "USER2@EXAMPLE.COM" }
                 });
 
             migrationBuilder.CreateIndex(

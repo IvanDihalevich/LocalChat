@@ -18,8 +18,7 @@ namespace LocalChat.WebUI.Controllers
 
         public IActionResult Index()
         {
-            var users = _userService.GetAllUsers();
-            return View(users);
+            return View();
         }
 
         public IActionResult Details(Guid id)
@@ -28,20 +27,16 @@ namespace LocalChat.WebUI.Controllers
             return View(user);
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(User user)
         {
             if (ModelState.IsValid)
             {
                 _userService.AddUser(user);
+                Console.WriteLine("Created user");
                 return RedirectToAction(nameof(Index));
             }
+            else Console.WriteLine("Not");
             return View(user);
         }
 

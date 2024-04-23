@@ -11,48 +11,43 @@ namespace LocalChat.Repository
 {
     public class UserService : IUserService
     {
-        private List<User> _users;
         private readonly ChatDbContext _dbContext;
 
         public UserService(ChatDbContext dbContext)
         {
             _dbContext = dbContext;
-            _users = new List<User>();
         }
 
 
         public void AddUser(User user)
         {
             // Додати користувача до списку користувачів
-            _users.Add(user);
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
         }
 
         public void UpdateUser(User updatedUser)
         {
             // Знайти і оновити користувача в списку
-            int index = _users.FindIndex(u => u.Id == updatedUser.Id);
-            if (index != -1)
-            {
-                _users[index] = updatedUser;
-            }
+            _dbContext.Users.Update(updatedUser);
         }
 
         public void DeleteUser(Guid userId)
         {
             // Видалити користувача за його ідентифікатором
-            _users.RemoveAll(u => u.Id == userId);
+            _dbContext.Users.Find(userId);
         }
 
         public User GetUserById(Guid userId)
         {
             // Знайти користувача за його ідентифікатором
-            return _users.Find(u => u.Id == userId);
+            return _dbContext.Users.Find(userId);
         }
 
         public List<User> GetAllUsers()
         {
             // Отримати всіх користувачів
-            return _users;
+            return _dbContext.Users.ToList();
         }
         public bool UserExists(Guid id)
         {
