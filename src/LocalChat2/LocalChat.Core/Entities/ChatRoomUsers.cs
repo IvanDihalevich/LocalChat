@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace LocalChat.Core.Entities
 {
-    internal class ChatRoomUsers
+    public class ChatRoomUsers
     {
+        public Guid Id { get; set; }
+        public User user { get; set; }
+        public ChatRoom chatRoomId { get; set; }
     }
 }
