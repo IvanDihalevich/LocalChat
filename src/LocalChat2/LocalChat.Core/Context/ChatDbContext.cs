@@ -1,37 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using LocalChat.Core.Entities;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using System.Reflection.Emit;
-using System.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace LocalChat.Core.Context
 {
-    public class ChatDbContext : DbContext
+    public class ChatDbContext :  IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
-        public DbSet<ChatRoom> ChatRooms { get; set; }
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<MessedgeUsers> messedgeUsers { get; set; }
-        public DbSet<ChatRoomUsers> ChatRoomUsers { get; set; }
+        public DbSet<ChatRoom> ChatRooms => Set<ChatRoom>();
+        public DbSet<Message> Messages => Set<Message>();
+        public DbSet<MessedgeUsers> messedgeUsers => Set<MessedgeUsers>();
+        public DbSet<ChatRoomUsers> ChatRoomUsers => Set<ChatRoomUsers>();
+        public ChatDbContext(DbContextOptions<ChatDbContext> options)
+         : base(options)
+        { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
         }
-        public ChatDbContext(DbContextOptions<ChatDbContext> options)
-         : base(options)
-        { }
-
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

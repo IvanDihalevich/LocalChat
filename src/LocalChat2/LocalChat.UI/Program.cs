@@ -1,25 +1,24 @@
-using LocalChat.Core.Context;
-using LocalChat.Repository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using LocalChat.Core.Entities;
+using LocalChat.Core.Context;
+using LocalChat.Repository.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChatDbContext>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRepositories();
 
-// Розділіть ConfigureServices від тіла методу Main
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,8 +42,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=ChatRoom}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
-
