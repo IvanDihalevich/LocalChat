@@ -1,5 +1,8 @@
-﻿using LocalChat.Repository.IEntity.Services;
+﻿using LocalChat.Core.Entities;
+using LocalChat.Repository.IEntity.Services;
 using LocalChat.Repository.Services;
+using LocalChat.Repository.UserRepositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,7 +18,10 @@ namespace LocalChat.Repository.DependencyInjection
         {
             services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
             services.AddScoped<IChatRoomService, ChatRoomService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<UserManager<User>>();    
+            services.AddScoped<RoleManager<IdentityRole<Guid>>>();
+
         }
     }
 }

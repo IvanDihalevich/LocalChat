@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Init21 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

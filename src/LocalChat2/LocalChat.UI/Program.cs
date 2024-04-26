@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using LocalChat.Core.Entities;
 using LocalChat.Core.Context;
+using Microsoft.AspNetCore.Identity;
 using LocalChat.Repository.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,16 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+
+builder.Services.AddDefaultIdentity<User>(
+options => {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 5;
+}).AddRoles <IdentityRole < Guid >>()
     .AddEntityFrameworkStores<ChatDbContext>();
 builder.Services.AddControllersWithViews();
 
