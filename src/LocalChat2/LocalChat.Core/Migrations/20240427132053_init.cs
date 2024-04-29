@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Init21 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +32,7 @@ namespace LocalChat.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -242,6 +244,38 @@ namespace LocalChat.Core.Migrations
                         column: x => x.MessedgeUsersId,
                         principalTable: "messedgeUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { new Guid("412fdddc-d4b3-4e7c-a098-d94f9f5544b7"), "412fdddc-d4b3-4e7c-a098-d94f9f5544b7", "User", "USER" },
+                    { new Guid("ad0c79d7-0ed1-4f30-87be-54e8669771bd"), "ad0c79d7-0ed1-4f30-87be-54e8669771bd", "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { new Guid("0cb3d133-deda-4124-acd9-b46d540763fe"), 0, "b1d5d41c-2537-49bf-971d-4ef6f09b3ec5", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER", "AQAAAAIAAYagAAAAELaTF2zCsizgnt7KU53/a8fo0blul0Vj3VOLTeURHBiqOHB9a5D0NTQSrcuMUYafYQ==", "0661430681", false, "34d641f8-5a02-4227-b0dd-0bca5bbfabf1", false, "User" },
+                    { new Guid("2b4f3ba5-a41f-4e92-b9d2-f9f64ecdb25e"), 0, "e80e4e3b-a33e-4509-8985-469c3b2edc7d", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN", "AQAAAAIAAYagAAAAEPijhrS5+gHyKXiHVkWMEgTsljVAsGcw4cD1zql3ke3YtbiXLLRzu5K3g68zkYxuRA==", "0661430681", false, "ee1a2cab-dcb4-4b9e-9dc4-4feca97a8be9", false, "Admin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ChatRooms",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("bf0b7512-22c0-4793-a45f-d384c73364a2"), "General" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("412fdddc-d4b3-4e7c-a098-d94f9f5544b7"), new Guid("0cb3d133-deda-4124-acd9-b46d540763fe") },
+                    { new Guid("ad0c79d7-0ed1-4f30-87be-54e8669771bd"), new Guid("2b4f3ba5-a41f-4e92-b9d2-f9f64ecdb25e") }
                 });
 
             migrationBuilder.CreateIndex(

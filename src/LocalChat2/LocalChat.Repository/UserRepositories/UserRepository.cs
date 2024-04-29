@@ -31,7 +31,7 @@ namespace LocalChat.Repository.UserRepositories
             {
                 Id = Guid.NewGuid(),
                 UserName = model.Email,
-                Name = model.Name,
+                FullName = model.FullName,
                 EmailConfirmed = false,
                 NormalizedUserName = model.Email.ToUpper(),
                 NormalizedEmail = model.Email.ToUpper(),
@@ -52,7 +52,7 @@ namespace LocalChat.Repository.UserRepositories
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    FullName = user.Name,
+                    FullName = user.FullName,
                     Roles = new List<IdentityRole<Guid>>()
                 };
 
@@ -79,10 +79,10 @@ namespace LocalChat.Repository.UserRepositories
                 user.NormalizedEmail = model.Email.ToUpper();
             }
 
-            if (user.Name != model.FullName)
-                user.Name = model.FullName;
+            if (user.FullName != model.FullName)
+                user.FullName = model.FullName;
 
-            //var admRole = await _roleManager.FindByNameAsync("Admin");
+            // var admRole = await _roleManager.FindByNameAsync("Admin");
 
             if ((await _userManager.GetRolesAsync(user)).Any())
             {
@@ -104,7 +104,7 @@ namespace LocalChat.Repository.UserRepositories
             {
                 Id = user.Id,
                 Email = user.Email,
-                FullName = user.Name,
+                FullName = user.FullName,
                 Roles = new List<IdentityRole<Guid>>()
             };
 

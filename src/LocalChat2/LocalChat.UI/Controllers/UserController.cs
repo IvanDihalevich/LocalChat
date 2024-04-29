@@ -5,21 +5,24 @@ using System.Threading.Tasks;
 using LocalChat.Core.Entities;
 using LocalChat.Repository;
 using LocalChat.Repository.Services;
+using Microsoft.AspNetCore.Authorization;
+using LocalChat.Repository.UserRepositories;
 
 namespace LocalChat.WebUI.Controllers
 {
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IUserRepository userRepository;
 
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
-
-        public IActionResult Index()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await userRepository.GetAllWithRolesAsync());
         }
 
         public IActionResult Details(Guid id)

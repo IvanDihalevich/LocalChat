@@ -17,7 +17,10 @@ namespace LocalChat.Core.Context
         { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Seed();
+                
             base.OnModelCreating(builder);
+
 
         }
 

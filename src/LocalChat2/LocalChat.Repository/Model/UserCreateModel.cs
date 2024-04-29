@@ -19,6 +19,6 @@ namespace LocalChat.Repository.Model
         public string? Password { get; set; }
 
         [Required]
-        public string? Name { get; set; }
+        public string? FullName { get; set; }
     }
 }

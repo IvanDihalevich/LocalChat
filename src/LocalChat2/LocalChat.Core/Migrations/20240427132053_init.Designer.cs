@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LocalChat.Core.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20240425221835_Init21")]
-    partial class Init21
+    [Migration("20240427132053_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,6 +38,13 @@ namespace LocalChat.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChatRooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("bf0b7512-22c0-4793-a45f-d384c73364a2"),
+                            Name = "General"
+                        });
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.ChatRoomUsers", b =>
@@ -130,15 +137,15 @@ namespace LocalChat.Core.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -178,6 +185,44 @@ namespace LocalChat.Core.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2b4f3ba5-a41f-4e92-b9d2-f9f64ecdb25e"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e80e4e3b-a33e-4509-8985-469c3b2edc7d",
+                            Email = "admin@localchat.example",
+                            EmailConfirmed = true,
+                            FullName = "Admin User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALCHAT.EXAMPLE",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPijhrS5+gHyKXiHVkWMEgTsljVAsGcw4cD1zql3ke3YtbiXLLRzu5K3g68zkYxuRA==",
+                            PhoneNumber = "0661430681",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "ee1a2cab-dcb4-4b9e-9dc4-4feca97a8be9",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("0cb3d133-deda-4124-acd9-b46d540763fe"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b1d5d41c-2537-49bf-971d-4ef6f09b3ec5",
+                            Email = "user@localchat.example",
+                            EmailConfirmed = true,
+                            FullName = "Regular User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@LOCALCHAT.EXAMPLE",
+                            NormalizedUserName = "USER",
+                            PasswordHash = "AQAAAAIAAYagAAAAELaTF2zCsizgnt7KU53/a8fo0blul0Vj3VOLTeURHBiqOHB9a5D0NTQSrcuMUYafYQ==",
+                            PhoneNumber = "0661430681",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "34d641f8-5a02-4227-b0dd-0bca5bbfabf1",
+                            TwoFactorEnabled = false,
+                            UserName = "User"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -206,6 +251,22 @@ namespace LocalChat.Core.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ad0c79d7-0ed1-4f30-87be-54e8669771bd"),
+                            ConcurrencyStamp = "ad0c79d7-0ed1-4f30-87be-54e8669771bd",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("412fdddc-d4b3-4e7c-a098-d94f9f5544b7"),
+                            ConcurrencyStamp = "412fdddc-d4b3-4e7c-a098-d94f9f5544b7",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -292,6 +353,18 @@ namespace LocalChat.Core.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("2b4f3ba5-a41f-4e92-b9d2-f9f64ecdb25e"),
+                            RoleId = new Guid("ad0c79d7-0ed1-4f30-87be-54e8669771bd")
+                        },
+                        new
+                        {
+                            UserId = new Guid("0cb3d133-deda-4124-acd9-b46d540763fe"),
+                            RoleId = new Guid("412fdddc-d4b3-4e7c-a098-d94f9f5544b7")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>

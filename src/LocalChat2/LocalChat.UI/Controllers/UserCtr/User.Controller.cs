@@ -1,0 +1,81 @@
+﻿using LocalChat.Repository.Model;
+using LocalChat.Repository.Models;
+using LocalChat.Repository.UserRepositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace LocalChat.UI.Controllers.UserCtr
+{
+    public class User : Controller
+    {
+        private readonly IUserRepository userRepository;
+        public User(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
+        {
+            return View(await userRepository.GetAllWithRolesAsync());
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new UserCreateModel());
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(UserCreateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userRepository.CreateWithPasswordAsync(model);
+
+                if (user != null)
+                {
+                    return RedirectToAction(nameof(Edit), new { id = user.Id });
+                }
+            }
+
+            return View(new UserCreateModel());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            ViewBag.Roles = await userRepository.GetRolesAsync();
+            return View(await userRepository.GetOneWithRolesAsync(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserListItemModel model, string[] roles)
+        {
+            if (ModelState.IsValid)
+            {
+                await userRepository.UpdateUserAsync(model, roles);
+                return RedirectToAction("Index");
+            }
+            ViewBag.Roles = await userRepository.GetRolesAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<int> CheckDelete(Guid id)
+        {
+            var check = await userRepository.CheckUser(id);
+            return check ? 1 : 0;
+        }
+
+        [HttpDelete]
+        public async Task Delete(Guid id)
+        {
+            await userRepository.DeleteUser(id);
+        }
+    }
+}
