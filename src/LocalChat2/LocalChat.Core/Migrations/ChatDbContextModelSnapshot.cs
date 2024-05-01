@@ -39,7 +39,7 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bf0b7512-22c0-4793-a45f-d384c73364a2"),
+                            Id = new Guid("8ff40481-2c8b-4eea-a0fe-f1d49a1b54ac"),
                             Name = "General"
                         });
                 });
@@ -186,39 +186,20 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2b4f3ba5-a41f-4e92-b9d2-f9f64ecdb25e"),
+                            Id = new Guid("8c2b76b8-1cea-4468-99b6-2eb8869ede97"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e80e4e3b-a33e-4509-8985-469c3b2edc7d",
+                            ConcurrencyStamp = "0ede583e-8163-4d28-92d9-2643261007b2",
                             Email = "admin@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Admin User",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALCHAT.EXAMPLE",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPijhrS5+gHyKXiHVkWMEgTsljVAsGcw4cD1zql3ke3YtbiXLLRzu5K3g68zkYxuRA==",
-                            PhoneNumber = "0661430681",
+                            NormalizedUserName = "ADMIN@LOCALCHAT.EXAMPLE",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEbLgdGS3ksMrcn4D/LaDY09rpQegqY8Tm8IehPkHGeIwNAAnmM+JuGX9jfXWZYoYw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ee1a2cab-dcb4-4b9e-9dc4-4feca97a8be9",
+                            SecurityStamp = "180dded1-b11a-46a6-93eb-35e9af829a59",
                             TwoFactorEnabled = false,
-                            UserName = "Admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("0cb3d133-deda-4124-acd9-b46d540763fe"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "b1d5d41c-2537-49bf-971d-4ef6f09b3ec5",
-                            Email = "user@localchat.example",
-                            EmailConfirmed = true,
-                            FullName = "Regular User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER@LOCALCHAT.EXAMPLE",
-                            NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAIAAYagAAAAELaTF2zCsizgnt7KU53/a8fo0blul0Vj3VOLTeURHBiqOHB9a5D0NTQSrcuMUYafYQ==",
-                            PhoneNumber = "0661430681",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "34d641f8-5a02-4227-b0dd-0bca5bbfabf1",
-                            TwoFactorEnabled = false,
-                            UserName = "User"
+                            UserName = "admin@localchat.example"
                         });
                 });
 
@@ -252,15 +233,15 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ad0c79d7-0ed1-4f30-87be-54e8669771bd"),
-                            ConcurrencyStamp = "ad0c79d7-0ed1-4f30-87be-54e8669771bd",
+                            Id = new Guid("3735d983-f07f-4435-96a0-1707c77e3a62"),
+                            ConcurrencyStamp = "3735d983-f07f-4435-96a0-1707c77e3a62",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("412fdddc-d4b3-4e7c-a098-d94f9f5544b7"),
-                            ConcurrencyStamp = "412fdddc-d4b3-4e7c-a098-d94f9f5544b7",
+                            Id = new Guid("73ebab1a-49b3-4052-b665-b426d22f4bef"),
+                            ConcurrencyStamp = "73ebab1a-49b3-4052-b665-b426d22f4bef",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -354,13 +335,13 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("2b4f3ba5-a41f-4e92-b9d2-f9f64ecdb25e"),
-                            RoleId = new Guid("ad0c79d7-0ed1-4f30-87be-54e8669771bd")
+                            UserId = new Guid("8c2b76b8-1cea-4468-99b6-2eb8869ede97"),
+                            RoleId = new Guid("3735d983-f07f-4435-96a0-1707c77e3a62")
                         },
                         new
                         {
-                            UserId = new Guid("0cb3d133-deda-4124-acd9-b46d540763fe"),
-                            RoleId = new Guid("412fdddc-d4b3-4e7c-a098-d94f9f5544b7")
+                            UserId = new Guid("8c2b76b8-1cea-4468-99b6-2eb8869ede97"),
+                            RoleId = new Guid("73ebab1a-49b3-4052-b665-b426d22f4bef")
                         });
                 });
 

@@ -7,6 +7,9 @@ using LocalChat.Repository;
 using LocalChat.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
 using LocalChat.Repository.UserRepositories;
+using Microsoft.AspNetCore.Identity;
+using LocalChat.UI.Areas.Identity.Pages.Account;
+
 
 namespace LocalChat.WebUI.Controllers
 {
@@ -14,11 +17,14 @@ namespace LocalChat.WebUI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IUserRepository userRepository;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, SignInManager<User> signInManager)
         {
             _userService = userService;
+            _signInManager = signInManager;
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
@@ -85,6 +91,7 @@ namespace LocalChat.WebUI.Controllers
             return View(user);
         }
 
+
         public IActionResult Delete(Guid id)
         {
             var user = _userService.GetUserById(id);
@@ -102,6 +109,36 @@ namespace LocalChat.WebUI.Controllers
         {
             _userService.DeleteUser(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        // Login method
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel.InputModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    // Successful login, redirect to the desired page
+                    return RedirectToAction("Index", "Home"); // Example
+                }
+                else
+                {
+                    // Invalid login attempt, display error message
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                    return View(model);
+                }
+            }
+            // Invalid input data, redisplay the login form with errors
+            return View(model);
         }
     }
 }

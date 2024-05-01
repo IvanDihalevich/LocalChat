@@ -56,34 +56,21 @@ namespace LocalChat.Core.Context
             var adminUser = new User
             {
                 Id = adminUserId,
-                UserName = "Admin",
-                NormalizedUserName = "Admin".ToUpper(),
+                UserName = "admin@localchat.example",
+                NormalizedUserName = "admin@localchat.example".ToUpper(),
                 Email = "admin@localchat.example",
                 NormalizedEmail = "admin@localchat.example".ToUpper(),
-                PhoneNumber = "0661430681",
+                //PhoneNumber = "0661430681",
                 EmailConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 FullName = "Admin User"
             };
 
-            var regularUser = new User
-            {
-                Id = regularUserId,
-                UserName = "User",
-                NormalizedUserName = "User".ToUpper(),
-                Email = "user@localchat.example",
-                NormalizedEmail = "user@localchat.example".ToUpper(),
-                PhoneNumber = "0661430681",
-                EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                FullName = "Regular User"
-            };
 
             var passwordHasher = new PasswordHasher<User>();
             adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "AdminPass123!");
-            regularUser.PasswordHash = passwordHasher.HashPassword(regularUser, "UserPass123!");
 
-            builder.Entity<User>().HasData(adminUser, regularUser);
+            builder.Entity<User>().HasData(adminUser);
 
             builder.Entity<IdentityUserRole<Guid>>()
                 .HasData(
@@ -95,7 +82,7 @@ namespace LocalChat.Core.Context
                     new IdentityUserRole<Guid>
                     {
                         RoleId = userRoleId,
-                        UserId = regularUserId
+                        UserId = adminUserId
                     }
                 );
 
