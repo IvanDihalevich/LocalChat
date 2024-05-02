@@ -66,11 +66,24 @@ namespace LocalChat.Core.Context
                 FullName = "Admin User"
             };
 
+            var regularUser = new User
+            {
+                Id = regularUserId,
+                UserName = "user@localchat.example",
+                NormalizedUserName = "user@localchat.example".ToUpper(),
+                Email = "user@localchat.example",
+                NormalizedEmail = "user@localchat.example".ToUpper(),
+                //PhoneNumber = "0661430681",
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                FullName = "Regular User"
+            };
 
             var passwordHasher = new PasswordHasher<User>();
             adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "AdminPass123!");
+            regularUser.PasswordHash = passwordHasher.HashPassword(regularUser, "UserPass123!");
 
-            builder.Entity<User>().HasData(adminUser);
+            builder.Entity<User>().HasData(adminUser, regularUser);
 
             builder.Entity<IdentityUserRole<Guid>>()
                 .HasData(
@@ -82,7 +95,7 @@ namespace LocalChat.Core.Context
                     new IdentityUserRole<Guid>
                     {
                         RoleId = userRoleId,
-                        UserId = adminUserId
+                        UserId = regularUserId
                     }
                 );
 
@@ -104,45 +117,5 @@ namespace LocalChat.Core.Context
 
             return chatRoomId;
         }
-
-        //private static void SeedMessages(ModelBuilder builder, Guid chatRoomId, List<Guid> userIds)
-        //{
-        //    var message1 = new Message
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Text = "Welcome to the General Chat!",
-        //        SendTime = DateTime.Now,
-        //        SenderId = new User { Id = userIds[0] } // Admin user
-        //    };
-
-        //    var message2 = new Message
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Text = "Hello, everyone!",
-        //        SendTime = DateTime.Now.AddMinutes(1),
-        //        SenderId = new User { Id = userIds[1] } // Regular user
-        //    };
-
-        //    builder.Entity<Message>().HasData(message1, message2);
-        //}
-
-        //private static void SeedChatRoomUsers(ModelBuilder builder, Guid chatRoomId, List<Guid> userIds)
-        //{
-        //    builder.Entity<ChatRoomUsers>()
-        //        .HasData(
-        //            new ChatRoomUsers
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                user = new User { Id = userIds[0] }, // Admin user
-        //                chatRoomId = new ChatRoom { Id = chatRoomId }
-        //            },
-        //            new ChatRoomUsers
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                user = new User { Id = userIds[1] }, // Regular user
-        //                chatRoomId = new ChatRoom { Id = chatRoomId }
-        //            }
-        //        );
-        //}
     }
 }

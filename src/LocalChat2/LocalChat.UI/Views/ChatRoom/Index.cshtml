@@ -1,0 +1,33 @@
+﻿@using LocalChat.Core.Entities
+@model IEnumerable<LocalChat.Core.Entities.Message>
+
+@foreach (var message in Model)
+{
+    <div>
+        <strong>@(message.SenderId != null ? message.SenderId.Email : "Unknown"):</strong> @message.Text
+        <span class="text-muted">@message.SendTime.ToString("dd/MM/yyyy HH:mm")</span>
+    </div>
+}
+
+
+<hr />
+
+<form id="send-message-form" asp-controller="Chat" asp-action="SendMessage">
+    <div class="form-group">
+        <label for="Text">Повідомлення:</label>
+        <textarea id="Text" name="Text" class="form-control" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Відправити</button>
+</form>
+
+<form asp-action="SendMessage">
+    <div class="form-group">
+        <label for="SenderId">Ваш Email:</label>
+        <input type="email" id="SenderId" name="SenderId" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="Text">Повідомлення:</label>
+        <textarea id="Text" name="Text" class="form-control" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Відправити</button>
+</form>

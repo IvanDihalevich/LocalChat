@@ -10,6 +10,6 @@ namespace LocalChat.Core.Entities
 {
     public class User : IdentityUser<Guid>, IEntity<Guid>
     {
-        public string FullName { get; set; } 
+        public string? FullName { get; set; } 
     }
 }

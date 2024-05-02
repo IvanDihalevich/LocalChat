@@ -3,6 +3,7 @@ using LocalChat.Core.Entities;
 using LocalChat.Core.Context;
 using Microsoft.AspNetCore.Identity;
 using LocalChat.Repository.DependencyInjection;
+using LocalChat.Repository.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 
 builder.Services.AddDefaultIdentity<User>(

@@ -122,7 +122,7 @@ namespace LocalChat.UI.Areas.Identity.Pages.Account
 
                 if (user == null)
                 {
-                    // Обробити випадок, коли не вдалося створити об'єкт користувача
+                    
                     return BadRequest("Failed to create user object.");
                 }
 
@@ -132,7 +132,7 @@ namespace LocalChat.UI.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    // Ваш код для успішної реєстрації користувача
+                    
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace LocalChat.UI.Areas.Identity.Pages.Account
                 }
             }
 
-            // Якщо ми дійшли сюди, щось пішло не так, повертаємо сторінку реєстрації
+           
             return Page();
         }
 

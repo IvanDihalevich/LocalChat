@@ -11,24 +11,48 @@ namespace LocalChat.WebUI.Controllers
     public class ChatRoomController : Controller
     {
         private readonly IChatRoomService _chatRoomService;
+        private readonly IMessageService _messageService;
 
-        public ChatRoomController(IChatRoomService chatRoomService)
+        public ChatRoomController(IChatRoomService chatRoomService, IMessageService messageService)
         {
             _chatRoomService = chatRoomService;
+            _messageService = messageService;
         }
 
         public IActionResult Index()
         {
             var chatRooms = _chatRoomService.GetAllChatRooms();
-            return View(chatRooms);
+            if (chatRooms == null)
+            {
+                // Обробка випадку, коли chatRooms є нульовим
+                return View(new List<Message>());
+            }
+
+            var messages = chatRooms.SelectMany(chatRoom => chatRoom.Messages);
+            return View(messages);
         }
+
+
+
+
 
         public IActionResult Details(Guid id)
         {
             var chatRoom = _chatRoomService.GetChatRoomById(id);
             return View(chatRoom);
         }
-
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SendMessage(Message message)
+        {
+            if (ModelState.IsValid)
+            {
+                message.SendTime = DateTime.Now; // Set current time
+                _messageService.SendMessage(message);
+            }
+            return RedirectToAction(nameof(Index));
+        }
         public IActionResult Create()
         {
             return View();

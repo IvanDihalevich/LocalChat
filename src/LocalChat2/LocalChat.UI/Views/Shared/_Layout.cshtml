@@ -25,10 +25,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                       @*  @if (User.IsInRole("User"))
+                        @if (User.IsInRole("User"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-action="My" asp-controller="Chat">Мої чати</a>
+                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="ChatRoom">Мої чати</a>
                             </li>
                         }
 
@@ -37,7 +37,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User">Користувачі</a>
                             </li>
-                        } *@
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
