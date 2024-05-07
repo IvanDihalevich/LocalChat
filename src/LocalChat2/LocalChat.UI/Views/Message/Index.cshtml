@@ -1,0 +1,36 @@
+﻿@model LocalChat.Core.Entities.Message  // Переконайтеся, що це тип моделі, який ви використовуєте
+
+@{
+    ViewData["Title"] = "Створити Нове Повідомлення";
+}
+
+<h1>Створити Нове Повідомлення</h1>
+
+<form asp-action="Create" method="post">
+    // Метод POST для надсилання форми
+    @Html.AntiForgeryToken()  // Захист від CSRF
+
+    <div class="form-group">
+        <label for="SenderId">Відправник</label>
+        <input asp-for="SenderId" type="text" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="MessedgeUsersId">Одержувач</label>  // Вибір одержувача
+        <select asp-for="MessedgeUsersId" class="form-control" asp-items="ViewBag.Users"></select>
+        <span asp-validation-for="MessedgeUsersId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Text">Вміст Повідомлення</label>  // Поле для вмісту
+        <textarea asp-for="Text" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Text" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Відправити</button>  // Кнопка відправки
+    <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Скасувати</a>  // Кнопка скасування
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />  // Для підтримки валідації
+}

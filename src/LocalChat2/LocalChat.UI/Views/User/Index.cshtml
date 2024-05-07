@@ -1,68 +1,36 @@
-﻿﻿@using LocalChat.Repository.Models
+﻿@using LocalChat.Repository.Models
+@model IEnumerable<UserListItemModel> 
 
-@model IEnumerable<UserListItemModel>
-
-<a href="/user/create" class="btn btn-primary float-end">Створити</a>
+<a href="/User/Create" class="btn btn-primary float-end">Створити</a>
 
 <h1>Користувачі</h1>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Full Name</th>
+            <th>Повне ім'я</th>  
             <th>Email</th>
-            <th>Roles</th>
-            <th>Confirmed</th>
-            <th>Actions</th>
+            <th>Ролі</th>  
+            <th>Підтверджено</th>  
+            <th>Дії</th>  
         </tr>
     </thead>
-
+    <tbody>
+        @foreach (var user in Model)  
+        {
+            <tr>
+                <td>@user.FullName</td>  
+                <td>@user.Email</td>  
+                <td>@string.Join(", ", user.Roles.Select(r => r.Name))</td>  
+                <td>
+                    
+                    <a href="@Url.Action("Details", "User", new { id = user.Id })">Деталі</a>  
+                    <a href="@Url.Action("Edit", "User", new { id = user.Id })">Редагувати</a>  
+                    <a href="@Url.Action("Delete", "User", new { id = user.Id })">Видалити</a>
+                    <a href="@Url.Action("Index", "Message", new { id = user.Id })">Написати</a>
+                </td
+            </tr>
+        }
     </tbody>
+
 </table>
-
-@* 
-@section Scripts {
-
-    <script>
-        $(function () {
-
-            var user_id = "";
-            var user_email = "";
-            var row = null;
-
-            $(".btn-remove-user").click(function () {
-
-                row = $(this).closest("tr");
-                user_id = $(this).attr("data-id");
-                user_email = $(this).attr("data-email");
-                $(".userName").html(user_email);
-
-                $.post("/user/checkdelete", { id: user_id }, function (data) {
-
-                    if (data == 0) {
-                        $("#modalError").modal("show");
-                    }
-                    else {
-                        $("#modalQuestion").modal("show");
-                    }
-                });
-            });
-
-            $(".btn-remove-approve").click(function () {
-
-                $.ajax({
-                    url: '/user/delete',
-                    type: 'DELETE',
-                    data: { id: user_id },
-                    success: function (result) {
-                        row.fadeOut();
-                        $("#modalQuestion").modal("hide");
-                    }
-                });
-
-            });
-
-        })
-    </script> *@
-
-}

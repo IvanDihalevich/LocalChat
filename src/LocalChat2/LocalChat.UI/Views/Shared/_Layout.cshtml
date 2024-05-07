@@ -31,7 +31,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="ChatRoom">Мої чати</a>
                             </li>
                         }
-
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="User">Мої Друзі</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">

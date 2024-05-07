@@ -117,5 +117,28 @@ namespace LocalChat.Core.Context
 
             return chatRoomId;
         }
+        //private static void SeedMessages(ModelBuilder builder, Guid chatRoomId, List<Guid> userIds)
+        //{
+        //    var adminUserId = userIds[0]; // Припускаючи, що перший елемент - це Admin
+        //    var regularUserId = userIds[1]; // А другий - Regular User
+
+        //    var message1 = new Message
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        SenderId = adminUserId,
+        //        Text = "Welcome to the chat room!",
+        //        SendTime = DateTime.Now
+        //    };
+
+        //    var message2 = new Message
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        SenderId = regularUserId,
+        //        Text = "Thank you! Glad to be here.",
+        //        SendTime = DateTime.Now.AddMinutes(5) // Час зрушений для різноманітності
+        //    };
+
+        //    builder.Entity<Message>().HasData(message1, message2);
+        //}
     }
 }

@@ -18,17 +18,19 @@ namespace LocalChat.WebUI.Controllers
         private readonly IUserService _userService;
         private readonly IUserRepository userRepository;
         private readonly SignInManager<User> _signInManager;
-
-        public UserController(IUserService userService, SignInManager<User> signInManager)
+        public UserController(IUserService userService, IUserRepository userRepository, SignInManager<User> signInManager)
         {
-            _userService = userService;
-            _signInManager = signInManager;
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        [Authorize(Roles = "Admin")]
+
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await userRepository.GetAllWithRolesAsync());
+            var usersWithRoles = await userRepository.GetAllWithRolesAsync();  // Отримуємо потрібний формат
+            return View(usersWithRoles);  // Передаємо дані у правильному форматі
         }
 
         public IActionResult Details(Guid id)

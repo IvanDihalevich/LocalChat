@@ -16,6 +16,6 @@ namespace LocalChat.Repository.Services
         void UpdateMessage(Message message);
         bool MessageExists(Guid id);
         void DeleteMessage(Guid id);
-        IQueryable<Message> GetAllMessages();
+        Task<IEnumerable<Message>> GetAll();
     }
 }

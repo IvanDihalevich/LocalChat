@@ -10,8 +10,10 @@ namespace LocalChat.Core.Entities
     {
 
         public Guid Id { get; set; }
-        public User SenderId { get; set; }
+        public Guid SenderId { get; set; }
         public string Text { get; set; }
         public DateTime SendTime { get; set; } = DateTime.Now;
+        public Guid ChatRoomId { get; internal set; }
+        public Guid MessedgeUsersId { get; internal set; }
     }
 }

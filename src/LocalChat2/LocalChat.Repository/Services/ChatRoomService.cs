@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LocalChat.Core.Context;
 using LocalChat.Core.Entities;
 using LocalChat.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace LocalChat.Repository.Services
 {
@@ -26,7 +27,7 @@ namespace LocalChat.Repository.Services
             return _dbContext.ChatRooms.FirstOrDefault(p => p.Id == chatRoomId);
         }
 
-        public List<ChatRoom> GetAllChatRooms()
+        public IEnumerable<ChatRoom> GetAllChatRooms()
         {
             return _dbContext.ChatRooms.ToList();
         }

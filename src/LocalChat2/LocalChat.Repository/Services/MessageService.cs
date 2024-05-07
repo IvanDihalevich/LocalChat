@@ -31,18 +31,20 @@ namespace LocalChat.Repository.Services
         {
             // Додаємо повідомлення до колекції
             _messages.Add(message);
+            _dbContext.Messages.Add(message); // Додаємо в базу даних
+            _dbContext.SaveChanges(); // Зберігаємо зміни
         }
 
         public Message GetMessageById(Guid messageId)
         {
             // Пошук повідомлення за його ідентифікатором
-            return _messages.Find(m => m.Id == messageId);
+            return _dbContext.Messages.FirstOrDefault(m => m.Id == messageId);
         }
 
         public List<Message> GetMessagesBySenderId(Guid senderId)
         {
             // Пошук повідомлень від заданого відправника
-            return _messages.FindAll(m => m.SenderId.Id == senderId);
+            return _messages.FindAll(m => m.SenderId == senderId);
         }
 
 
@@ -52,10 +54,12 @@ namespace LocalChat.Repository.Services
             return _messages.FindAll(m => m.SendTime == sendTime);
         }
 
-        public IQueryable<Message> GetAllMessages()
+        public async Task<IEnumerable<Message>> GetAll()
         {
-            return _dbContext.Messages;
+            return await _dbContext.Messages.ToListAsync();
+           //return _dbContext.Messages ?? Enumerable.Empty<Message>().AsQueryable(); // Завжди повертає валідну колекцію
         }
+
 
         public void UpdateMessage(Message message)
         {

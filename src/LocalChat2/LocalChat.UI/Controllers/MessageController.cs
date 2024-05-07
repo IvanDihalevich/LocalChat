@@ -1,109 +1,88 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using LocalChat.Core.Context;
+using LocalChat.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using LocalChat.Core.Entities;
-using LocalChat.Repository;
-using LocalChat.Repository.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
-namespace LocalChat.WebUI.Controllers
+namespace LocalChat.UI.Controllers
 {
+    [Authorize]  // Вимога аутентифікації
     public class MessageController : Controller
     {
-        private readonly IMessageService _messageService;
+        private readonly ChatDbContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public MessageController(IMessageService messageService)
+        public MessageController(ChatDbContext dbContext, UserManager<User> userManager)
         {
-            _messageService = messageService;
+            _dbContext = dbContext;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        // Метод для відображення списку повідомлень
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            var messages = _messageService.GetAllMessages();
-            return View(messages);
+            // Отримання всіх повідомлень із завантаженням пов'язаних даних
+            var messages = await _dbContext.Messages
+                .Include(m => m.SenderId)  // Завантаження пов'язаного відправника
+                .Include(m => m.MessedgeUsersId)  // Завантаження пов'язаного одержувача
+                .OrderByDescending(m => m.SendTime)  // Сортування за часом відправлення
+                .ToListAsync();  // Асинхронне отримання списку
+
+            return View(messages);  // Передача списку повідомлень у вигляд
         }
 
-        public IActionResult Details(Guid id)
+        // Метод для відображення сторінки створення нового повідомлення
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            var message = _messageService.GetMessageById(id);
-            return View(message);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Message message)
-        {
-            if (ModelState.IsValid)
-            {
-                _messageService.SendMessage(message);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(message);
-        }
-
-        public IActionResult Edit(Guid id)
-        {
-            var message = _messageService.GetMessageById(id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-            return View(message);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, Message message)
-        {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+            var currentUser = await _userManager.GetUserAsync(User);  // Отримання поточного користувача
+            var users = _dbContext.Users
+                .Where(u => u.Id != currentUser.Id)  // Відфільтрувати, щоб не включати поточного користувача
+                .Select(u => new SelectListItem
                 {
-                    _messageService.UpdateMessage(message);
-                }
-                catch (Exception)
-                {
-                    if (!_messageService.MessageExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(message);
+                    Text = u.FullName ?? u.UserName,  // Показувати повне ім'я або ім'я користувача
+                    Value = u.Id.ToString()
+                })
+                .ToList();
+
+            ViewBag.Users = users;  // Додавання списку користувачів у ViewBag
+
+            return View(new Message { SenderId = currentUser.Id });  // Передача ідентифікатора відправника у вигляд
         }
 
-        public IActionResult Delete(Guid id)
+        // Метод для обробки відправки форми
+        [HttpPost]
+        [ValidateAntiForgeryToken]  // Захист від CSRF
+        public async Task<IActionResult> Create(Message message)
         {
-            var message = _messageService.GetMessageById(id);
-            if (message == null)
+            if (!ModelState.IsValid)  // Перевірка валідності даних
             {
-                return NotFound();
+                var currentUser = await _userManager.GetUserAsync(User);
+                ViewBag.Users = _dbContext.Users
+                    .Where(u => u.Id != currentUser.Id)
+                    .Select(u => new SelectListItem
+                    {
+                        Text = u.FullName ?? u.UserName,
+                        Value = u.Id.ToString()
+                    })
+                    .ToList();
+
+                return View(message);  // Повернути форму з помилками валідації
             }
 
-            return View(message);
-        }
+            message.Id = Guid.NewGuid();  // Генерація унікального ідентифікатора
+            message.SendTime = DateTime.UtcNow;  // Встановлення часу відправлення
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
-        {
-            _messageService.DeleteMessage(id);
-            return RedirectToAction(nameof(Index));
+            _dbContext.Messages.Add(message);  // Додавання нового повідомлення до контексту
+            await _dbContext.SaveChangesAsync();  // Збереження змін у базі даних
+
+            return RedirectToAction("Index");  // Перенаправлення на список повідомлень
         }
     }
 }

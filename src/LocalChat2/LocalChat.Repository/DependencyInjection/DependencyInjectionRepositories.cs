@@ -19,7 +19,9 @@ namespace LocalChat.Repository.DependencyInjection
             services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
             services.AddScoped<IChatRoomService, ChatRoomService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<RoleManager<IdentityRole<Guid>>>();
+            
 
         }
     }
