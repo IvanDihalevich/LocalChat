@@ -7,14 +7,14 @@
 }
 else
 {
-    
+
     <table class="table">
         <thead>
             <tr>
-                <th>Chat</th>
-                <th>Join</th>
-@*                 <th>Send Time</th>
-                <th>Actions</th> *@
+                <th>Sender</th>
+                <th>Text</th>
+                <th>Send Time</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,13 +22,13 @@ else
             {
                 <tr>
                     <td>@item.Name</td>
-                    @* <td>@item.Messages</td> *@
+                    <td>@item.Messages</td>
                     <td>
-                        <a href="@Url.Action("Index", "Message")" class="btn btn-success">Написати</a>
+                        <a href="/chatroomadmin/delete/@item.Id" class="btn btn-danger">Видалити</a>
                     </td>
                 </tr>
             }
         </tbody>
-        @* <a href="/chatroom/create" class="btn btn-success float-end" type="button">Create</a> *@
+        <a href="/chatroomadmin/create" class="btn btn-success float-end" type="button">Create</a>
     </table>
 }

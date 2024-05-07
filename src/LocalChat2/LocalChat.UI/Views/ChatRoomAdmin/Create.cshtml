@@ -1,0 +1,31 @@
+﻿﻿@using LocalChat.Core.Entities
+@model ChatRoom
+
+@{
+}
+
+<h1>Новий проєкт</h1>
+
+
+<form asp-action="Create" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="row">
+        <div data="mb-3">
+            @Html.DisplayNameFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            <span asp-validation-for="Name" class="text-danger" />
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <button class="btn btn-primary btn-block" style="width: 100% !important" type="submit">Зберегти</button>
+        </div>
+    </div>
+</form>
+@*
+
+
+*@

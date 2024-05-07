@@ -31,16 +31,16 @@
                                 <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="ChatRoom">Мої чати</a>
                             </li>
                         }
-                        @if (User.IsInRole("User"))
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="User">Мої Друзі</a>
+                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="User">Всі користувачі</a>
                             </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User">Користувачі</a>
+                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="ChatRoomAdmin">Всі чати</a>
                             </li>
                         }
                     </ul>
