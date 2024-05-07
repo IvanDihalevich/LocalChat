@@ -32,6 +32,17 @@ namespace LocalChat.WebUI.Controllers
             var usersWithRoles = await userRepository.GetAllWithRolesAsync();  // Отримуємо потрібний формат
             return View(usersWithRoles);  // Передаємо дані у правильному форматі
         }
+        [HttpGet]
+        public IActionResult Message()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         public IActionResult Details(Guid id)
         {

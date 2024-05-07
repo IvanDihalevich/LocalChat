@@ -17,6 +17,8 @@ namespace LocalChat.UI.Controllers
         private readonly ChatDbContext _dbContext;
         private readonly UserManager<User> _userManager;
 
+
+
         public MessageController(ChatDbContext dbContext, UserManager<User> userManager)
         {
             _dbContext = dbContext;
@@ -28,61 +30,53 @@ namespace LocalChat.UI.Controllers
         public async Task<IActionResult> Index()
         {
             // Отримання всіх повідомлень із завантаженням пов'язаних даних
-            var messages = await _dbContext.Messages
-                .Include(m => m.SenderId)  // Завантаження пов'язаного відправника
-                .Include(m => m.MessedgeUsersId)  // Завантаження пов'язаного одержувача
-                .OrderByDescending(m => m.SendTime)  // Сортування за часом відправлення
-                .ToListAsync();  // Асинхронне отримання списку
+            //var messages = await _dbContext.Messages
+            //    .Include(m => m.SenderId)  // Завантаження пов'язаного відправника
+            //    .Include(m => m.MessedgeUsersId)  // Завантаження пов'язаного одержувача
+            //    .OrderByDescending(m => m.SendTime)  // Сортування за часом відправлення
+            //    .ToListAsync();  // Асинхронне отримання списку
 
-            return View(messages);  // Передача списку повідомлень у вигляд
+            //return View(messages);  // Передача списку повідомлень у вигляд
+            return View();
         }
 
         // Метод для відображення сторінки створення нового повідомлення
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var currentUser = await _userManager.GetUserAsync(User);  // Отримання поточного користувача
-            var users = _dbContext.Users
-                .Where(u => u.Id != currentUser.Id)  // Відфільтрувати, щоб не включати поточного користувача
-                .Select(u => new SelectListItem
-                {
-                    Text = u.FullName ?? u.UserName,  // Показувати повне ім'я або ім'я користувача
-                    Value = u.Id.ToString()
-                })
-                .ToList();
-
-            ViewBag.Users = users;  // Додавання списку користувачів у ViewBag
-
-            return View(new Message { SenderId = currentUser.Id });  // Передача ідентифікатора відправника у вигляд
+            return View();  // Передача ідентифікатора відправника у вигляд
         }
-
-        // Метод для обробки відправки форми
         [HttpPost]
-        [ValidateAntiForgeryToken]  // Захист від CSRF
         public async Task<IActionResult> Create(Message message)
         {
-            if (!ModelState.IsValid)  // Перевірка валідності даних
-            {
-                var currentUser = await _userManager.GetUserAsync(User);
-                ViewBag.Users = _dbContext.Users
-                    .Where(u => u.Id != currentUser.Id)
-                    .Select(u => new SelectListItem
-                    {
-                        Text = u.FullName ?? u.UserName,
-                        Value = u.Id.ToString()
-                    })
-                    .ToList();
-
-                return View(message);  // Повернути форму з помилками валідації
-            }
-
-            message.Id = Guid.NewGuid();  // Генерація унікального ідентифікатора
-            message.SendTime = DateTime.UtcNow;  // Встановлення часу відправлення
-
-            _dbContext.Messages.Add(message);  // Додавання нового повідомлення до контексту
-            await _dbContext.SaveChangesAsync();  // Збереження змін у базі даних
-
-            return RedirectToAction("Index");  // Перенаправлення на список повідомлень
+            return View(new Message { Text = message.Text });  // Передача ідентифікатора відправника у вигляд
         }
+
+        //[HttpPost, ActionName("Create")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([FromBody] Message message)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            message.SendTime = DateTime.UtcNow;
+        //            _messages.Add(message);
+        //            _dbContext.Messages.Add(message);
+        //            await _dbContext.SaveChangesAsync();
+        //            return Ok("Повідомлення успішно відправлено");
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Недійсні дані повідомлення");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, "Помилка під час відправлення повідомлення: " + ex.Message);
+        //    }
+        //    return View(nameof(Index));
+        //}
+
     }
 }

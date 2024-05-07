@@ -24,12 +24,11 @@ else
                     <td>@item.Name</td>
                     <td>@item.Messages</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a href="/chatroom/delete/@item.Id" class="btn btn-danger">Видалити</a>
                     </td>
                 </tr>
             }
         </tbody>
+        <a href="/chatroom/create" class="btn btn-success float-end" type="button">Create</a>
     </table>
 }

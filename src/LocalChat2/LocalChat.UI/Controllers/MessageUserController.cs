@@ -10,6 +10,7 @@ namespace LocalChat.WebUI.Controllers
     public class MessageUserController : Controller
     {
         private readonly IMessageUserService _messageUserService;
+        
 
         public MessageUserController(IMessageUserService messageUserService)
         {

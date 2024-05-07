@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -247,8 +247,8 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("4fc6ea54-d977-40bc-b65e-2efc86986573"), "4fc6ea54-d977-40bc-b65e-2efc86986573", "Admin", "ADMIN" },
-                    { new Guid("e4a3f7b5-39e4-4826-8a06-1321eec962d5"), "e4a3f7b5-39e4-4826-8a06-1321eec962d5", "User", "USER" }
+                    { new Guid("69c7bf35-eaf7-4763-bb54-54693f6e54f7"), "69c7bf35-eaf7-4763-bb54-54693f6e54f7", "Admin", "ADMIN" },
+                    { new Guid("881343af-a53d-48ff-a26f-2adcc3a07a97"), "881343af-a53d-48ff-a26f-2adcc3a07a97", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -256,22 +256,22 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("49cd2f6f-2114-48f7-ab5f-494d9146c74e"), 0, "4cab2117-c248-4c67-b8ed-92db0db7f702", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEA1Zz/kz3bpXAOesnZ/L7MuxUM8qY4ow9Qb2hQLDb/tXYSFq/8D6mFCGb+7TU8z5+Q==", null, false, "587b3c7e-57dc-466c-84c4-d8b12a63cae4", false, "admin@localchat.example" },
-                    { new Guid("c3c64e11-af6d-4eba-ba58-48f26c059da3"), 0, "2025b06e-b941-47b6-9fe0-8c449ae56fbc", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEHC3NVSFIEaIzSa+QheHBHzjGYDUWEf3AoAed/yAcbBWf0H1g12JLy38r/g92hkq3w==", null, false, "cdd943cf-edfd-4e0f-86a4-b17b9f1690aa", false, "user@localchat.example" }
+                    { new Guid("54072ef5-1cf7-48d8-bace-78c832d05a89"), 0, "f1e64591-c1cc-4bb5-aaac-462ba7496b6d", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEB0qYm1EQvbpJLyAHEfWwnJCB+OkU9XmSszyB+ErWjpZseXZkTwbnHTAWghVP9WhYA==", null, false, "842c190b-4055-4b29-bdb3-e74e9e11a2bb", false, "admin@localchat.example" },
+                    { new Guid("d390135d-3134-4374-8272-99a989cf0124"), 0, "6209ae6e-19e6-42b3-9508-3e7c564dfe9d", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAELqs+b09am0vFSysTlhtSklceKAve1yg9CFdj4p5PHg6fTfHDFDUPt/fWSHk7p0K7A==", null, false, "5ad8735e-fdf4-42b7-a839-d85c592ef2d3", false, "user@localchat.example" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ChatRooms",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("314dfba1-fbf6-4baa-a978-86ca72da9827"), "General" });
+                values: new object[] { new Guid("d5cec21f-141d-4762-9d30-e760ab282db5"), "General" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("4fc6ea54-d977-40bc-b65e-2efc86986573"), new Guid("49cd2f6f-2114-48f7-ab5f-494d9146c74e") },
-                    { new Guid("e4a3f7b5-39e4-4826-8a06-1321eec962d5"), new Guid("c3c64e11-af6d-4eba-ba58-48f26c059da3") }
+                    { new Guid("69c7bf35-eaf7-4763-bb54-54693f6e54f7"), new Guid("54072ef5-1cf7-48d8-bace-78c832d05a89") },
+                    { new Guid("881343af-a53d-48ff-a26f-2adcc3a07a97"), new Guid("d390135d-3134-4374-8272-99a989cf0124") }
                 });
 
             migrationBuilder.CreateIndex(
