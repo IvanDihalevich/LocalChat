@@ -1,82 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LocalChat.Core.Context;
-using LocalChat.Core.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using LocalChat.Core.Entities;
+using LocalChat.Repository.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
-namespace LocalChat.UI.Controllers
+public class MessageController : Controller
 {
-    [Authorize]  // Вимога аутентифікації
-    public class MessageController : Controller
+    private readonly IMessageService _messageService;
+
+    public MessageController(IMessageService messageService)
     {
-        private readonly ChatDbContext _dbContext;
-        private readonly UserManager<User> _userManager;
+        _messageService = messageService;
+    }
 
+    // Метод для відображення списку повідомлень
+    public async Task<IActionResult> Index()
+    {
+        var messages = await _messageService.GetAll();
+        return View(messages);
+    }
 
-
-        public MessageController(ChatDbContext dbContext, UserManager<User> userManager)
+    // Метод для відображення форми створення нового повідомлення
+    public IActionResult Create()
+    {
+        var newMessage = new Message
         {
-            _dbContext = dbContext;
-            _userManager = userManager;
+            SenderId = Guid.NewGuid(),  // Тут можна встановити реальний ідентифікатор відправника
+            SendTime = DateTime.Now  // Час надсилання встановлюємо відразу
+        };
+        return View(newMessage);
+    }
+
+    // Метод для обробки даних після відправки форми
+    [HttpPost]
+    [ValidateAntiForgeryToken]  // Додано для захисту від CSRF
+    public async Task<IActionResult> Create(Message message)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(message);  // Повертаємо форму, якщо є помилки валідації
         }
 
-        // Метод для відображення списку повідомлень
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            // Отримання всіх повідомлень із завантаженням пов'язаних даних
-            //var messages = await _dbContext.Messages
-            //    .Include(m => m.SenderId)  // Завантаження пов'язаного відправника
-            //    .Include(m => m.MessedgeUsersId)  // Завантаження пов'язаного одержувача
-            //    .OrderByDescending(m => m.SendTime)  // Сортування за часом відправлення
-            //    .ToListAsync();  // Асинхронне отримання списку
+        message.Id = Guid.NewGuid();  // Генеруємо новий ідентифікатор
+        message.SendTime = DateTime.Now;  // Встановлюємо час відправки
 
-            //return View(messages);  // Передача списку повідомлень у вигляд
-            return View();
-        }
+        await _messageService.AddMessageAsync(message);  // Зберігаємо повідомлення асинхронно
 
-        // Метод для відображення сторінки створення нового повідомлення
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            return View();  // Передача ідентифікатора відправника у вигляд
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(Message message)
-        {
-            return View(new Message { Text = message.Text });  // Передача ідентифікатора відправника у вигляд
-        }
-
-        //[HttpPost, ActionName("Create")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([FromBody] Message message)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            message.SendTime = DateTime.UtcNow;
-        //            _messages.Add(message);
-        //            _dbContext.Messages.Add(message);
-        //            await _dbContext.SaveChangesAsync();
-        //            return Ok("Повідомлення успішно відправлено");
-        //        }
-        //        else
-        //        {
-        //            return BadRequest("Недійсні дані повідомлення");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, "Помилка під час відправлення повідомлення: " + ex.Message);
-        //    }
-        //    return View(nameof(Index));
-        //}
-
+        return RedirectToAction("Index");  // Повертаємося до списку повідомлень після успішного створення
     }
 }

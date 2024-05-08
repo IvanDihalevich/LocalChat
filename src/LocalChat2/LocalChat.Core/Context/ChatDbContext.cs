@@ -2,6 +2,7 @@
 using LocalChat.Core.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Reflection.Emit;
 
 
 namespace LocalChat.Core.Context
@@ -20,6 +21,13 @@ namespace LocalChat.Core.Context
             builder.Seed();
                 
             base.OnModelCreating(builder);
+
+            // Встановлення відношення між `Message` і `User`
+            builder.Entity<Message>()
+                .HasOne(m => m.Sender)  // Відношення один до одного
+                .WithMany()  // Користувач може мати багато повідомлень
+                .HasForeignKey(m => m.SenderId)  // Вказуємо, що `SenderId` - це зовнішній ключ
+                .OnDelete(DeleteBehavior.Restrict);  // Опція на випадок видалення користувача
 
 
         }

@@ -1,63 +1,21 @@
-﻿ @model LocalChat.Core.Entities.Message
+﻿@model LocalChat.Core.Entities.Message
 
+@{
+    ViewData["Title"] = "Додати повідомлення";
+}
 
-@* <!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Діалогове вікно з повідомленнями</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
+<h1>Додати повідомлення</h1>
 
-    <div class="modal fade show" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: block;">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Напишіть ваше повідомлення</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="messageForm">
-                        <div class="form-group">
-                            <textarea class="form-control" id="message" rows="5" placeholder="Напишіть повідомлення"></textarea>
-                        </div>
-                        <div class="text-right">
-                            <button type="button" class="btn btn-primary" onclick="sendMessage()">Відправити</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Text">Текст повідомлення:</label>
+        <input type="text" class="form-control" asp-for="Text" />
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div class="form-group">
+        <input type="hidden" asp-for="Sender" />  
+    </div>
 
-    <script>
-        function sendMessage() {
-            var messageText = $('#message').val(); // Отримати текст повідомлення з поля вводу
-
-            $.ajax({
-                url: '/Message/Create', // URL, до якого буде відправлено запит
-                method: 'POST', // Метод запиту
-                data: { Text: messageText }, // Дані для відправлення на сервер
-                success: function (response) { // У разі успішності запиту
-                    alert('Повідомлення успішно відправлено!');
-                    $('#exampleModal').modal('hide'); // Сховати модальне вікно
-                },
-                error: function (xhr, status, error) { // У разі помилки запиту
-                    console.error(xhr.responseText);
-                    alert('Сталася помилка під час відправлення повідомлення.');
-                }
-            });
-        }
-    </script>
-
-</body>
-</html>
- *@
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+    <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Відмінити</a>
+</form>

@@ -17,6 +17,12 @@ namespace LocalChat.WebUI.Controllers
             _messageUserService = messageUserService;
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddMessageToUser(Guid userId, Message message)

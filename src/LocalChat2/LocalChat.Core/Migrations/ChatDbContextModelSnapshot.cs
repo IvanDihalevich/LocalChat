@@ -39,7 +39,7 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d5cec21f-141d-4762-9d30-e760ab282db5"),
+                            Id = new Guid("dd668d76-0550-4a7f-b022-08c2124b6043"),
                             Name = "General"
                         });
                 });
@@ -92,6 +92,8 @@ namespace LocalChat.Core.Migrations
                     b.HasIndex("ChatRoomId");
 
                     b.HasIndex("MessedgeUsersId");
+
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -183,35 +185,35 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("54072ef5-1cf7-48d8-bace-78c832d05a89"),
+                            Id = new Guid("c9ad9a0b-7910-4027-b59d-c80b3c7e76ab"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f1e64591-c1cc-4bb5-aaac-462ba7496b6d",
+                            ConcurrencyStamp = "1f16f131-d01a-46f6-8c29-ee55ecc24311",
                             Email = "admin@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Admin User",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALCHAT.EXAMPLE",
                             NormalizedUserName = "ADMIN@LOCALCHAT.EXAMPLE",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB0qYm1EQvbpJLyAHEfWwnJCB+OkU9XmSszyB+ErWjpZseXZkTwbnHTAWghVP9WhYA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJx5HnqHiAYLcp+cfCzWNaVUC6/Q+7HaL4GNJD2ila4KapnQ00WRkldzkGlM6mcQ6A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "842c190b-4055-4b29-bdb3-e74e9e11a2bb",
+                            SecurityStamp = "8403610d-026b-45e1-aaf8-576c839c615f",
                             TwoFactorEnabled = false,
                             UserName = "admin@localchat.example"
                         },
                         new
                         {
-                            Id = new Guid("d390135d-3134-4374-8272-99a989cf0124"),
+                            Id = new Guid("4c69d28c-cdcf-49fe-bdc0-8c1629fc9f63"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6209ae6e-19e6-42b3-9508-3e7c564dfe9d",
+                            ConcurrencyStamp = "896010d8-5dda-4a30-a87c-dccf88861208",
                             Email = "user@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Regular User",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALCHAT.EXAMPLE",
                             NormalizedUserName = "USER@LOCALCHAT.EXAMPLE",
-                            PasswordHash = "AQAAAAIAAYagAAAAELqs+b09am0vFSysTlhtSklceKAve1yg9CFdj4p5PHg6fTfHDFDUPt/fWSHk7p0K7A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL+hVMTxElyH+SEUHH0Yj1X5p9KTA7ehQLA5acwcDs1icQFPpSq6PdlN3duelOhGpA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5ad8735e-fdf4-42b7-a839-d85c592ef2d3",
+                            SecurityStamp = "89ff3c4d-65e2-4aa5-b68b-fe6b4bdb0770",
                             TwoFactorEnabled = false,
                             UserName = "user@localchat.example"
                         });
@@ -247,15 +249,15 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("69c7bf35-eaf7-4763-bb54-54693f6e54f7"),
-                            ConcurrencyStamp = "69c7bf35-eaf7-4763-bb54-54693f6e54f7",
+                            Id = new Guid("371297ee-ddea-4f39-8184-a5df605fed58"),
+                            ConcurrencyStamp = "371297ee-ddea-4f39-8184-a5df605fed58",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("881343af-a53d-48ff-a26f-2adcc3a07a97"),
-                            ConcurrencyStamp = "881343af-a53d-48ff-a26f-2adcc3a07a97",
+                            Id = new Guid("bfd7a682-27a1-40fd-a296-3eb9ab8be5d3"),
+                            ConcurrencyStamp = "bfd7a682-27a1-40fd-a296-3eb9ab8be5d3",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -349,13 +351,13 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("54072ef5-1cf7-48d8-bace-78c832d05a89"),
-                            RoleId = new Guid("69c7bf35-eaf7-4763-bb54-54693f6e54f7")
+                            UserId = new Guid("c9ad9a0b-7910-4027-b59d-c80b3c7e76ab"),
+                            RoleId = new Guid("371297ee-ddea-4f39-8184-a5df605fed58")
                         },
                         new
                         {
-                            UserId = new Guid("d390135d-3134-4374-8272-99a989cf0124"),
-                            RoleId = new Guid("881343af-a53d-48ff-a26f-2adcc3a07a97")
+                            UserId = new Guid("4c69d28c-cdcf-49fe-bdc0-8c1629fc9f63"),
+                            RoleId = new Guid("bfd7a682-27a1-40fd-a296-3eb9ab8be5d3")
                         });
                 });
 
@@ -412,6 +414,14 @@ namespace LocalChat.Core.Migrations
                         .HasForeignKey("MessedgeUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("LocalChat.Core.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>

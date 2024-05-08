@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,6 +229,12 @@ namespace LocalChat.Core.Migrations
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Messages_ChatRooms_ChatRoomId",
                         column: x => x.ChatRoomId,
                         principalTable: "ChatRooms",
@@ -247,8 +253,8 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("69c7bf35-eaf7-4763-bb54-54693f6e54f7"), "69c7bf35-eaf7-4763-bb54-54693f6e54f7", "Admin", "ADMIN" },
-                    { new Guid("881343af-a53d-48ff-a26f-2adcc3a07a97"), "881343af-a53d-48ff-a26f-2adcc3a07a97", "User", "USER" }
+                    { new Guid("371297ee-ddea-4f39-8184-a5df605fed58"), "371297ee-ddea-4f39-8184-a5df605fed58", "Admin", "ADMIN" },
+                    { new Guid("bfd7a682-27a1-40fd-a296-3eb9ab8be5d3"), "bfd7a682-27a1-40fd-a296-3eb9ab8be5d3", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -256,22 +262,22 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("54072ef5-1cf7-48d8-bace-78c832d05a89"), 0, "f1e64591-c1cc-4bb5-aaac-462ba7496b6d", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEB0qYm1EQvbpJLyAHEfWwnJCB+OkU9XmSszyB+ErWjpZseXZkTwbnHTAWghVP9WhYA==", null, false, "842c190b-4055-4b29-bdb3-e74e9e11a2bb", false, "admin@localchat.example" },
-                    { new Guid("d390135d-3134-4374-8272-99a989cf0124"), 0, "6209ae6e-19e6-42b3-9508-3e7c564dfe9d", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAELqs+b09am0vFSysTlhtSklceKAve1yg9CFdj4p5PHg6fTfHDFDUPt/fWSHk7p0K7A==", null, false, "5ad8735e-fdf4-42b7-a839-d85c592ef2d3", false, "user@localchat.example" }
+                    { new Guid("4c69d28c-cdcf-49fe-bdc0-8c1629fc9f63"), 0, "896010d8-5dda-4a30-a87c-dccf88861208", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEL+hVMTxElyH+SEUHH0Yj1X5p9KTA7ehQLA5acwcDs1icQFPpSq6PdlN3duelOhGpA==", null, false, "89ff3c4d-65e2-4aa5-b68b-fe6b4bdb0770", false, "user@localchat.example" },
+                    { new Guid("c9ad9a0b-7910-4027-b59d-c80b3c7e76ab"), 0, "1f16f131-d01a-46f6-8c29-ee55ecc24311", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEJx5HnqHiAYLcp+cfCzWNaVUC6/Q+7HaL4GNJD2ila4KapnQ00WRkldzkGlM6mcQ6A==", null, false, "8403610d-026b-45e1-aaf8-576c839c615f", false, "admin@localchat.example" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ChatRooms",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("d5cec21f-141d-4762-9d30-e760ab282db5"), "General" });
+                values: new object[] { new Guid("dd668d76-0550-4a7f-b022-08c2124b6043"), "General" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("69c7bf35-eaf7-4763-bb54-54693f6e54f7"), new Guid("54072ef5-1cf7-48d8-bace-78c832d05a89") },
-                    { new Guid("881343af-a53d-48ff-a26f-2adcc3a07a97"), new Guid("d390135d-3134-4374-8272-99a989cf0124") }
+                    { new Guid("bfd7a682-27a1-40fd-a296-3eb9ab8be5d3"), new Guid("4c69d28c-cdcf-49fe-bdc0-8c1629fc9f63") },
+                    { new Guid("371297ee-ddea-4f39-8184-a5df605fed58"), new Guid("c9ad9a0b-7910-4027-b59d-c80b3c7e76ab") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -332,6 +338,11 @@ namespace LocalChat.Core.Migrations
                 name: "IX_Messages_MessedgeUsersId",
                 table: "Messages",
                 column: "MessedgeUsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_SenderId",
+                table: "Messages",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_messedgeUsers_ReceiverId",

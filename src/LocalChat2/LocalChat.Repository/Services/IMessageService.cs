@@ -15,6 +15,7 @@ namespace LocalChat.Repository.Services
         List<Message> GetMessagesBySendTime(DateTime sendTime);
         void UpdateMessage(Message message);
         bool MessageExists(Guid id);
+        Task AddMessageAsync(Message message);
         void DeleteMessage(Guid id);
         Task<IEnumerable<Message>> GetAll();
     }
