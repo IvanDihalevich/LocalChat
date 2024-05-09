@@ -1,51 +1,80 @@
-﻿using LocalChat.Core.Entities;
-using LocalChat.Repository.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using LocalChat.Core.Context;
+using LocalChat.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using LocalChat.Repository.Services;
+using System.Security.Claims;
 
-public class MessageController : Controller
+namespace LocalChat.UI.Controllers
 {
-    private readonly IMessageService _messageService;
-
-    public MessageController(IMessageService messageService)
+    [Authorize]  // Require authentication
+    public class MessageController : Controller
     {
-        _messageService = messageService;
-    }
+        private readonly ChatDbContext _dbContext;
+        private readonly UserManager<User> _userManager;
+        private readonly IMessageService _messageService;
 
-    // Метод для відображення списку повідомлень
-    public async Task<IActionResult> Index()
-    {
-        var messages = await _messageService.GetAll();
-        return View(messages);
-    }
-
-    // Метод для відображення форми створення нового повідомлення
-    public IActionResult Create()
-    {
-        var newMessage = new Message
+        public MessageController(ChatDbContext dbContext, UserManager<User> userManager, IMessageService messageService)
         {
-            SenderId = Guid.NewGuid(),  // Тут можна встановити реальний ідентифікатор відправника
-            SendTime = DateTime.Now  // Час надсилання встановлюємо відразу
-        };
-        return View(newMessage);
-    }
-
-    // Метод для обробки даних після відправки форми
-    [HttpPost]
-    [ValidateAntiForgeryToken]  // Додано для захисту від CSRF
-    public async Task<IActionResult> Create(Message message)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(message);  // Повертаємо форму, якщо є помилки валідації
+            _dbContext = dbContext;
+            _userManager = userManager;
+            _messageService = messageService;
         }
 
-        message.Id = Guid.NewGuid();  // Генеруємо новий ідентифікатор
-        message.SendTime = DateTime.Now;  // Встановлюємо час відправки
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var messages = await _messageService.GetAll();
+            return View(messages);
+        }
 
-        await _messageService.AddMessageAsync(message);  // Зберігаємо повідомлення асинхронно
+        [HttpGet]
+        public IActionResult Create(Guid chatRoomId)
+        {
+            // Pass the chatRoomId to the Create view
+            ViewData["ChatRoomId"] = chatRoomId;
+            return View();
+        }
 
-        return RedirectToAction("Index");  // Повертаємося до списку повідомлень після успішного створення
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Guid chatRoomId, [Bind("Name")] ChatRoom chatRoom, Message message)
+        {
+            if (ModelState.IsValid)
+            {
+                // Retrieve the currently authenticated user
+                var user = await _userManager.GetUserAsync(User);
+
+                // Set the SenderId using the currently authenticated user
+                message.SenderId = Guid.Parse(await _userManager.GetUserIdAsync(user));
+
+                // Set the ChatRoomId from the provided parameter
+                message.ChatRoomId = chatRoomId;
+                // Set the ChatRoom object from the provided parameter
+                message.ChatRoom = chatRoom;
+
+                // Call the service method to add the message
+                await _messageService.AddMessageAsync(message);
+
+                // Redirect to the Index action after successful creation
+                return RedirectToAction("Index");
+            }
+
+            // If the model state is not valid, populate the ViewData dictionary with the chatRoomId parameter
+            ViewData["ChatRoomId"] = chatRoomId;
+            // Populate the ViewData dictionary with the chatRoom parameter
+            ViewData["ChatRoom"] = chatRoom;
+
+            // Return the view with the posted data
+            return View(message);
+        }
+
+
+
     }
 }

@@ -14,7 +14,6 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddScoped<IMessageService, MessageService>();
 
 
 builder.Services.AddDefaultIdentity<User>(

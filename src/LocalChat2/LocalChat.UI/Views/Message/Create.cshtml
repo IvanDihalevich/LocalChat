@@ -1,8 +1,36 @@
 ﻿@model LocalChat.Core.Entities.Message
+@using System.Security.Claims
+@using LocalChat.Core.Entities;
 
 @{
     ViewData["Title"] = "Додати повідомлення";
 }
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Text">Текст повідомлення:</label>
+        <input asp-for="Text" class="form-control" />
+        <input type="hidden" asp-for="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+        <input type="hidden" name="chatRoom.Name" value="@ViewData["ChatRoom"]" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+    <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Скасувати</a>
+</form>
+
+@* <h1>Створити повідомлення</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Text">Текст повідомлення:</label>
+        <input asp-for="Text" class="form-control" />
+        <input type="hidden" asp-for="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+    <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Скасувати</a>
+</form> *@
+@* 
 
 <h1>Додати повідомлення</h1>
 
@@ -13,9 +41,14 @@
     </div>
 
     <div class="form-group">
-        <input type="hidden" asp-for="Sender" />  
+        <input type="hidden" asp-for="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+    </div>
+
+
+    <div class="form-group">
+        <input type="hidden" asp-for="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
     </div>
 
     <button type="submit" class="btn btn-primary">Зберегти</button>
     <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Відмінити</a>
-</form>
+</form> *@

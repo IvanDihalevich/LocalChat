@@ -6,6 +6,9 @@
 
 <h1>Чат</h1>
 
+<!-- Button to add a new message -->
+<a href="@Url.Action("Create", "Message")" class="btn btn-primary">Додати нове повідомлення</a>
+
 @if (Model == null || !Model.Any())
 {
     <p>Немає повідомлень для відображення.</p>
@@ -26,13 +29,13 @@ else
             {
                 <tr>
                     <td>
-                        @if (message.Sender == null)
+                        @if (message.SenderId == null)
                         {
                             @:Невідомо
                         }
                         else
                         {
-                            @message.Sender
+                            @message.SenderId
                         }
                     </td>
                     <td>
@@ -48,16 +51,9 @@ else
                     <td>
                         @message.Text
                     </td>
-                    <td>
-                        <!-- Додаткові посилання або дії -->
-                    </td>
+                    
                 </tr>
             }
         </tbody>
     </table>
 }
-
-<!-- Кнопка для додавання нового повідомлення -->
-<div>
-    <a class="btn btn-primary" href="@Url.Action("Create", "Message")">Додати повідомлення</a>
-</div>

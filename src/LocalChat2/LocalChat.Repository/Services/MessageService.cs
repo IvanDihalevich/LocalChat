@@ -1,55 +1,80 @@
-﻿using LocalChat.Core.Entities;
-using LocalChat.Repository.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using LocalChat.Core.Context;
+using LocalChat.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
-public class MessageController : Controller
+namespace LocalChat.Repository.Services
 {
-    private readonly IMessageService _messageService;
-
-    public MessageController(IMessageService messageService)
+    public class MessageService : IMessageService
     {
-        _messageService = messageService;
-    }
+        private readonly ChatDbContext _dbContext;
 
-    public async Task<IActionResult> Index()
-    {
-        var messages = await _messageService.GetAll();
-        return View(messages);
-    }
-
-    public IActionResult Create()
-    {
-        var newMessage = new Message
+        public MessageService(ChatDbContext dbContext)
         {
-            SenderId = Guid.NewGuid(),  // Тут можна встановити реальний ідентифікатор відправника
-            SendTime = DateTime.Now  // Час надсилання встановлюємо відразу
-        };
-        return View(newMessage);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]  // Захист від CSRF
-    public async Task<IActionResult> Create(Message message)
-    {
-        if (!ModelState.IsValid)  // Перевірка валідації даних
-        {
-            return View(message);
+            _dbContext = dbContext;
         }
 
-        try
+        public async Task AddMessageAsync(Message message)
         {
-            message.Id = Guid.NewGuid();  // Генерація нового ідентифікатора
-            message.SendTime = DateTime.Now;  // Час надсилання
-
-            await _messageService.AddMessageAsync(message);  // Додавання повідомлення асинхронно
-
-            TempData["SuccessMessage"] = "Повідомлення успішно створено.";  // Повідомлення про успіх
-            return RedirectToAction("Index");  // Повернення до списку повідомлень
+            _dbContext.Messages.Add(message);
+            await _dbContext.SaveChangesAsync();
         }
-        catch (Exception ex)  // Обробка винятків
+
+        public void SendMessage(Message message)
         {
-            ModelState.AddModelError("", "Сталася помилка при збереженні повідомлення. Спробуйте ще раз.");
-            return View(message);  // Повернення до форми з помилками
+            _dbContext.Messages.Add(message);
+            _dbContext.SaveChanges();
         }
+
+        public Message GetMessageById(Guid messageId)
+        {
+            return _dbContext.Messages.FirstOrDefault(m => m.Id == messageId);
+        }
+
+        public List<Message> GetMessagesBySenderId(Guid senderId)
+        {
+            return _dbContext.Messages.Where(m => m.SenderId == senderId).ToList();
+        }
+
+        public List<Message> GetMessagesBySendTime(DateTime sendTime)
+        {
+            return _dbContext.Messages.Where(m => m.SendTime == sendTime).ToList();
+        }
+
+        public async Task<IEnumerable<Message>> GetAll()
+        {
+            return await _dbContext.Messages.ToListAsync();
+        }
+
+        public void UpdateMessage(Message message)
+        {
+            var existingMessage = _dbContext.Messages.FirstOrDefault(m => m.Id == message.Id);
+            if (existingMessage != null)
+            {
+                existingMessage.Text = message.Text;
+                existingMessage.SendTime = message.SendTime;
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public bool MessageExists(Guid id)
+        {
+            return _dbContext.Messages.Any(m => m.Id == id);
+        }
+
+        public void DeleteMessage(Guid id)
+        {
+            var messageToDelete = _dbContext.Messages.FirstOrDefault(m => m.Id == id);
+            if (messageToDelete != null)
+            {
+                _dbContext.Messages.Remove(messageToDelete);
+                _dbContext.SaveChanges();
+            }
+        }
+
     }
 }

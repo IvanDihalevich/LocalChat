@@ -20,6 +20,8 @@ namespace LocalChat.Repository.DependencyInjection
             services.AddScoped<IChatRoomService, ChatRoomService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMessageService, MessageService>();
+
             services.AddScoped<RoleManager<IdentityRole<Guid>>>();
             
 
