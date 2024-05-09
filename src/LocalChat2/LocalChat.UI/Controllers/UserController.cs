@@ -104,22 +104,19 @@ namespace LocalChat.WebUI.Controllers
             return View(user);
         }
 
-
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Guid id)
+        [HttpPost]
+        public async Task<int> CheckDelete(Guid id)
         {
-            _userService.DeleteUser(id);
-            return RedirectToAction(nameof(Index));
+            var check = await userRepository.CheckUser(id);
+            return check ? 1 : 0;
         }
 
-        // Login method
-        [HttpGet]
-        public IActionResult Login()
+        [HttpDelete]
+        public async Task Delete(Guid id)
         {
-            return View();
+            await userRepository.DeleteUser(id);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
