@@ -6,6 +6,27 @@
     ViewData["Title"] = "Чат";
 }
 
+<style>
+    .message-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .message {
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #cceeff; /* блакитний колір фону повідомлень */
+        max-width: 70%;
+        align-self: flex-start; /* розташовуємо ліворуч */
+    }
+
+    .sent-by-user {
+        align-self: flex-end; /* розташовуємо праворуч */
+        background-color: #d9ead3; /* колір фону для повідомлень, відправлених користувачем */
+    }
+</style>
+
 <h1>Чат</h1>
 
 <!-- Button to add a new message -->
@@ -17,60 +38,49 @@
 }
 else
 {
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Від кого повідомлення</th>
-                <th>Час надісланого повідомлення</th>
-                <th>Текст</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var message in Model)
-            {
-                <tr>
-                    <td>
-                        @if (message.SenderId == null)
-                        {
-                            @:Невідомо
-                        }
-                        else
-                        {
-                            @message.SenderId
-                        }
-                    </td>
-                    <td>
-                        @if (message.SendTime == null)
-                        {
-                            @:Невідомо
-                        }
-                        else
-                        {
-                            @message.SendTime
-                        }
-                    </td>
-                    <td>
-                        @message.Text
-                    </td>
-                    
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <footer>
-        <form asp-controller="Message" asp-action="Create">
-            <input type="hidden" name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
-            <input type="hidden" name="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
-            <input type="text" disabled name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
-
-            <div class="form-group">
-                <label for="Text">Текст повідомлення:</label>
-                <input type="text" class="form-control" name="Text" />
+    <div class="message-container">
+        @foreach (var message in Model)
+        {
+            var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            <div class="message @(message.SenderId == currentUserId ? "sent-by-user" : "")">
+                <div class="message-sender">
+                    @if (message.SenderId == null)
+                    {
+                        <span class="unknown-sender">Невідомо</span>
+                    }
+                    else
+                    {
+                        <span>@message.SenderId</span>
+                    }
+                </div>
+                <div class="message-text">
+                    @message.Text
+                </div>
+                <div class="message-time">
+                    @if (message.SendTime == null)
+                    {
+                        <span class="unknown-time">Невідомо</span>
+                    }
+                    else
+                    {
+                        <span>@message.SendTime</span>
+                    }
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Зберегти</button>
-        </form>
-    </footer>
-
+        }
+    </div>
 }
+
+<footer>
+    <form asp-controller="Message" asp-action="Create">
+        <input type="hidden" name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+        <input type="hidden" name="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
+        <input type="text" disabled name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+
+        <div class="form-group">
+            <label for="Text">Текст повідомлення:</label>
+            <input type="text" class="form-control" name="Text" />
+        </div>
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+</footer>

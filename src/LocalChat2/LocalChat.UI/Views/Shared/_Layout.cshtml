@@ -1,68 +1,145 @@
-﻿<!DOCTYPE html>
+﻿Іввівен, [09.05.2024 20:32]
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LocalChat.UI</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LocalChat.UI.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LocalChat.UI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+<partial name="_TemplateHead" />
+<body class="navbar-fixed sidebar-fixed" id="body">
+
+    <script>
+        NProgress.configure({ showSpinner: false });
+        NProgress.start();
+    </script>
+
+    <div class="wrapper">
+
+        <aside class="left-sidebar sidebar-dark" id="left-sidebar">
+            <div id="sidebar" class="sidebar sidebar-with-footer">
+                <!-- Aplication Brand -->
+                <div class="app-brand">
+                    <a href="/">
+                       
+
+                        <span class="brand-name">Chat</span>
+                    </a>
+                </div>
+                <!-- begin sidebar scrollbar -->
+                <div class="sidebar-left" data-simplebar style="height: 100%;">
+                    <!-- sidebar menu -->
+                    <ul class="nav sidebar-inner" id="sidebar-menu">
+
+
+
+
+                        <li>
+
+                            <a class="sidenav-item-link" href="/ChatRoom">
+                                <i class="fa-solid fa-briefcase"></i>
+                                <span class="nav-text">ChatRoom</span>
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        <li>
+
+                       
                         @if (User.IsInRole("User"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="ChatRoom">Мої чати</a>
+                            <li>
+
+                                <a class="sidenav-item-link" href="/home/my">
+                                    <i class="fa-solid fa-user-group"></i>
+                                    <span class="nav-text">My Projects</span>
+                                </a>
                             </li>
                         }
+
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="User">Всі користувачі</a>
+                            <li>
+
+                                <a class="sidenav-item-link" href="/User">
+                                    <i class="fa-solid fa-user-group"></i>
+                                    <span class="nav-text">Users</span>
+                                </a>
                             </li>
                         }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="ChatRoomAdmin">Всі чати</a>
-                            </li>
-                        }
+
                     </ul>
-                    <partial name="_LoginPartial" />
+
                 </div>
+
+
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </aside>
+        <div class="page-wrapper">
+
+       
+            <header class="main-header" id="header">
+                <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+                    <!-- Sidebar toggle button -->
+                    <button id="sidebar-toggler" class="sidebar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+
+                    <span class="page-title">Chat</span>
+
+                    <div class="navbar-right ">
+
+
+
+                        <ul class="nav navbar-nav">
+
+
+
+
+                            <partial name="_LoginPartial.cshtml" />
+
+                        </ul>
+
+
+
+                    </div>
+
+
+                </nav>
+
+
+
+            </header>
+
+            @*  <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectC_.WebUI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+            <li class="nav-item">
+            <!-- Вставте сюди ваші опції сторінок -->
+            </li>
+            </ul>
+            <partial name="_LoginPartial" />
+            </div>
+            </div>
+            </nav>
+            </header> *@
+
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+        </div>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - LocalChat.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+
+
+
+    <partial name="_TemplateScripts" />
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
