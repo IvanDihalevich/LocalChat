@@ -23,11 +23,11 @@ namespace LocalChat.Core.Context
         {
             builder.Seed();
 
-            // Вказуємо зовнішній ключ для відносини один до одного між ChatRoom і Message
-            builder.Entity<ChatRoom>()
-                .HasOne(c => c.Messages)        // ChatRoom має одне повідомлення
-                .WithOne(m => m.ChatRoom)       // Повідомлення належить тільки одній кімнаті чату
-                .HasForeignKey<Message>(m => m.ChatRoomId); // Зовнішній ключ у таблиці повідомлень
+            // Вказуємо відношення один до багатьох між ChatRoom і Message
+            builder.Entity<Message>()
+                .HasOne(m => m.ChatRoom)       // Повідомлення належить одній кімнаті чату
+                .WithMany(c => c.Messages)      // Кожна кімната чату може мати багато повідомлень
+                .HasForeignKey(m => m.ChatRoomId); // Зовнішній ключ у таблиці повідомлень
 
             base.OnModelCreating(builder);
         }

@@ -45,13 +45,13 @@ namespace LocalChat.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Messages.Add(model);
-                await _dbContext.SaveChangesAsync();
+                await _messageService.AddMessageAsync(model); // Виклик методу AddMessageAsync вашого сервісу
                 return RedirectToAction(nameof(Index));
             }
 
             return View(model);
         }
+
 
 
 

@@ -11,6 +11,7 @@ namespace LocalChat.Core.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid? MessageID { get; set; }
-        public virtual Message? Messages { get; set; } 
+        public virtual ICollection<Message>? Messages { get; set; }
+
     }
 }

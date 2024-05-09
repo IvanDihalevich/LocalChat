@@ -18,12 +18,24 @@ namespace LocalChat.Repository.Services
             _dbContext = dbContext;
         }
 
+    
         public async Task AddMessageAsync(Message message)
         {
-            _dbContext.Messages.Add(message);
+            var lastmassage = await _dbContext.Messages.OrderByDescending(p => p.Id).FirstOrDefaultAsync();
+
+            if (lastmassage != null)
+            {
+
+                message.Id = Guid.NewGuid();
+            }
+            else
+            {
+                message.Id = Guid.NewGuid();
+            }
+
+            await _dbContext.Messages.AddAsync(message);
             await _dbContext.SaveChangesAsync();
         }
-
         public void SendMessage(Message message)
         {
             _dbContext.Messages.Add(message);

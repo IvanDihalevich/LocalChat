@@ -10,7 +10,7 @@ namespace LocalChat.Core.Entities
 {
     public class Message : IEntity<Guid>
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid SenderId { get; set; }
         public string Text { get; set; }
         public DateTime SendTime { get; set; } = DateTime.Now;
