@@ -1,36 +1,115 @@
 ﻿@using LocalChat.Repository.Models
-@model IEnumerable<UserListItemModel> 
 
-<a href="/User/Create" class="btn btn-primary float-end">Створити</a>
+@model IEnumerable<UserListItemModel>
+
 
 <h1>Користувачі</h1>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Повне ім'я</th>  
+            <th>Full Name</th>
             <th>Email</th>
-            <th>Ролі</th>  
-            <th>Підтверджено</th>  
-            <th>Дії</th>  
+            <th>Roles</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)  
+        @foreach (var u in Model)
         {
             <tr>
-                <td>@user.FullName</td>  
-                <td>@user.Email</td>  
-                <td>@string.Join(", ", user.Roles.Select(r => r.Name))</td>  
+                <td>@u.FullName</td>
+                <td>@u.Email</td>
+
+                <td>@string.Join(", ", u.Roles)</td>
                 <td>
-                    
-                    <a href="@Url.Action("Details", "User", new { id = user.Id })">Деталі</a>  
-                    <a href="@Url.Action("Edit", "User", new { id = user.Id })">Редагувати</a>  
-                    <a href="@Url.Action("Delete", "User", new { id = user.Id })">Видалити</a>
-                    <a href="@Url.Action("Create", "Message", new { id = user.Id })">Написати</a>
+                    <a href="/user/edit/@u.Id" class="btn btn-warning">Edit</a>
+                    <a href="#" data-id="@u.Id" data-email="@u.Email" class="btn btn-danger btn-remove-user">Remove</a>
                 </td>
+
             </tr>
         }
     </tbody>
-
 </table>
+
+
+<div class="modal" tabindex="-1" id="modalError">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Помилка!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Не можливо видалити користувача <strong class="userName">-</strong>.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modalQuestion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Видалення</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Чи справді Ви бажаєте назавжди видалити користувача <strong class="userName">-</strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn-primary btn btn-remove-approve">Так! Видаляємо!</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(function () {
+
+            var user_id = "";
+            var user_email = "";
+            var row = null;
+
+            $(".btn-remove-user").click(function () {
+
+                row = $(this).closest("tr");
+                user_id = $(this).attr("data-id");
+                user_email = $(this).attr("data-email");
+                $(".userName").html(user_email);
+
+                $.post("/user/checkdelete", { id: user_id }, function (data) {
+
+                    if (data == 0) {
+                        $("#modalError").modal("show");
+                    }
+                    else {
+                        $("#modalQuestion").modal("show");
+                    }
+                });
+            });
+
+            $(".btn-remove-approve").click(function () {
+
+                $.ajax({
+                    url: '/user/delete',
+                    type: 'DELETE',
+                    data: { id: user_id },
+                    success: function (result) {
+                        row.fadeOut();
+                        $("#modalQuestion").modal("hide");
+                    }
+                });
+
+            });
+
+        })
+    </script>
+
+}

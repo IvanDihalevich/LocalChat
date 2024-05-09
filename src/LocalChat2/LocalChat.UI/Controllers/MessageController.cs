@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using LocalChat.Repository.Services;
 using System.Security.Claims;
 
+
 namespace LocalChat.UI.Controllers
 {
     [Authorize]  // Require authentication
@@ -26,11 +27,11 @@ namespace LocalChat.UI.Controllers
             _messageService = messageService;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index(Guid id)
         {
             ViewData["ChatRoomId"] = id;
             var messages = await _messageService.GetAllByChatRoomId(id);
+            messages = messages.OrderBy(m => m.SendTime); // Сортування за часом спаданням
             return View(messages);
         }
 

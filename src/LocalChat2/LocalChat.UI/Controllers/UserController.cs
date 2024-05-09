@@ -105,20 +105,10 @@ namespace LocalChat.WebUI.Controllers
         }
 
 
-        public IActionResult Delete(Guid id)
-        {
-            var user = _userService.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public IActionResult Delete(Guid id)
         {
             _userService.DeleteUser(id);
             return RedirectToAction(nameof(Index));

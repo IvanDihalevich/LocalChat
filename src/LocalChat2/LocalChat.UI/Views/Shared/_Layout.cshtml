@@ -27,25 +27,25 @@
                     <ul class="nav sidebar-inner" id="sidebar-menu">
 
 
-
-
-                        <li>
-
-                            <a class="sidenav-item-link" href="/ChatRoom">
-                                <i class="fa-solid fa-briefcase"></i>
-                                <span class="nav-text">ChatRoom</span>
-                            </a>
-                        </li>
-                        <li>
-
                        
                         @if (User.IsInRole("User"))
                         {
                             <li>
 
-                                <a class="sidenav-item-link" href="/home/my">
-                                    <i class="fa-solid fa-user-group"></i>
-                                    <span class="nav-text">My Projects</span>
+                                <a class="sidenav-item-link" href="/ChatRoom">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                    <span class="nav-text">ChatRoom</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+
+                                <a class="sidenav-item-link" href="/ChatRoomAdmin">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                    <span class="nav-text">ChatRoomAdmin</span>
                                 </a>
                             </li>
                         }

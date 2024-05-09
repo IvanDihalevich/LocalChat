@@ -7,10 +7,16 @@
 }
 
 <style>
+    body {
+        overflow: hidden; /* Вимкнути прокрутку сторінки */
+    }
+
     .message-container {
         display: flex;
         flex-direction: column;
         gap: 10px;
+        max-height: calc(80vh - 130px); /* Фіксована висота контейнера (висота вікна мінус висота footer та верхнього заголовка) */
+        overflow-y: auto; /* Додати прокрутку по вертикалі */
     }
 
     .message {
@@ -38,7 +44,7 @@
 }
 else
 {
-    <div class="message-container">
+    <div class="message-container" id="message-container">
         @foreach (var message in Model)
         {
             var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -56,7 +62,7 @@ else
                 <div class="message-text">
                     @message.Text
                 </div>
-                <div class="message-time">
+                <div>
                     @if (message.SendTime == null)
                     {
                         <span class="unknown-time">Невідомо</span>
@@ -71,7 +77,7 @@ else
     </div>
 }
 
-<footer>
+<div>
     <form asp-controller="Message" asp-action="Create">
         <input type="hidden" name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
         <input type="hidden" name="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
@@ -83,4 +89,10 @@ else
         </div>
         <button type="submit" class="btn btn-primary">Зберегти</button>
     </form>
-</footer>
+</div>
+
+<script>
+    // Автоматична прокрутка до останнього повідомлення при завантаженні сторінки
+    var messageContainer = document.getElementById("message-container");
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+</script>
