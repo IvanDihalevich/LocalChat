@@ -5,36 +5,11 @@
 @{
     ViewData["Title"] = "Додати повідомлення";
 }
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Text">Текст повідомлення:</label>
-        <input asp-for="Text" class="form-control" />
-        <input type="hidden" asp-for="ChatRoomId" value="@ViewData["ChatRoomId"]" />
-        <input type="hidden" name="chatRoom.Name" value="@ViewData["ChatRoom"]" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Зберегти</button>
-    <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Скасувати</a>
-</form>
-
-@* <h1>Створити повідомлення</h1>
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Text">Текст повідомлення:</label>
-        <input asp-for="Text" class="form-control" />
-        <input type="hidden" asp-for="ChatRoomId" value="@ViewData["ChatRoomId"]" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Зберегти</button>
-    <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Скасувати</a>
-</form> *@
-@* 
-
 <h1>Додати повідомлення</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ChatRoomId" />
     <div class="form-group">
         <label for="Text">Текст повідомлення:</label>
         <input type="text" class="form-control" asp-for="Text" />
@@ -42,6 +17,7 @@
 
     <div class="form-group">
         <input type="hidden" asp-for="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+        <input type="hidden" asp-for="ChatRoom" value="@ViewData["ChatRoom"]" />
     </div>
 
 
@@ -51,4 +27,4 @@
 
     <button type="submit" class="btn btn-primary">Зберегти</button>
     <a href="@Url.Action("Index", "Message")" class="btn btn-secondary">Відмінити</a>
-</form> *@
+</form>

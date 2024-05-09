@@ -34,44 +34,23 @@ namespace LocalChat.UI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(Guid chatRoomId)
+        public IActionResult Create(Guid id)
         {
-            // Pass the chatRoomId to the Create view
-            ViewData["ChatRoomId"] = chatRoomId;
-            return View();
+            return View(new Message() { ChatRoomId = id });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Guid chatRoomId, [Bind("Name")] ChatRoom chatRoom, Message message)
+        public async Task<IActionResult> Create(Message model)
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the currently authenticated user
-                var user = await _userManager.GetUserAsync(User);
-
-                // Set the SenderId using the currently authenticated user
-                message.SenderId = Guid.Parse(await _userManager.GetUserIdAsync(user));
-
-                // Set the ChatRoomId from the provided parameter
-                message.ChatRoomId = chatRoomId;
-                // Set the ChatRoom object from the provided parameter
-                message.ChatRoom = chatRoom;
-
-                // Call the service method to add the message
-                await _messageService.AddMessageAsync(message);
-
-                // Redirect to the Index action after successful creation
-                return RedirectToAction("Index");
+                _dbContext.Messages.Add(model);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
-            // If the model state is not valid, populate the ViewData dictionary with the chatRoomId parameter
-            ViewData["ChatRoomId"] = chatRoomId;
-            // Populate the ViewData dictionary with the chatRoom parameter
-            ViewData["ChatRoom"] = chatRoom;
-
-            // Return the view with the posted data
-            return View(message);
+            return View(model);
         }
 
 

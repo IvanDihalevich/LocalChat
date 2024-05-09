@@ -19,7 +19,7 @@ else
                 <tr>
                     <td>@chatRoom.Name</td>
                     <td>
-                        <a href="@Url.Action("Create", "Message", new { chatRoomId = chatRoom.Id, chatRoom = chatRoom.Name })" class="btn btn-primary">Створити нове повідомлення</a>
+                        <a href="@Url.Action("Create", "Message", new { id = chatRoom.Id })" class="btn btn-primary glow-on-hover vidstan">Детальніше</a>
                     </td>
                 </tr>
             }

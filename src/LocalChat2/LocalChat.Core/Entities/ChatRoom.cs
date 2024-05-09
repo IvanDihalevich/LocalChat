@@ -10,6 +10,7 @@ namespace LocalChat.Core.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<Message> Messages { get; set; } = new List<Message>();
+        public Guid? MessageID { get; set; }
+        public virtual Message? Messages { get; set; } 
     }
 }

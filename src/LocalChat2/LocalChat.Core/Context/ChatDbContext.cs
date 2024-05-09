@@ -2,32 +2,34 @@
 using LocalChat.Core.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using System.Reflection.Emit;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-
+using System;
 
 namespace LocalChat.Core.Context
 {
-    public class ChatDbContext :  IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class ChatDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
-        public DbSet<ChatRoom> ChatRooms => Set<ChatRoom>();
-        public DbSet<Message> Messages => Set<Message>();
-        public DbSet<MessedgeUsers> messedgeUsers => Set<MessedgeUsers>();
-        public DbSet<ChatRoomUsers> ChatRoomUsers => Set<ChatRoomUsers>();
-
         public ChatDbContext(DbContextOptions<ChatDbContext> options)
-         : base(options)
-        { }
-        protected override void OnModelCreating(ModelBuilder builder)
+            : base(options)
         {
-            builder.Seed();
-            base.OnModelCreating(builder);
-
-
 
         }
 
+        public DbSet<ChatRoom> ChatRooms { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MessedgeUsers> MessedgeUsers { get; set; }
+        public DbSet<ChatRoomUsers> ChatRoomUsers { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Seed();
+
+            // Вказуємо зовнішній ключ для відносини один до одного між ChatRoom і Message
+            builder.Entity<ChatRoom>()
+                .HasOne(c => c.Messages)        // ChatRoom має одне повідомлення
+                .WithOne(m => m.ChatRoom)       // Повідомлення належить тільки одній кімнаті чату
+                .HasForeignKey<Message>(m => m.ChatRoomId); // Зовнішній ключ у таблиці повідомлень
+
+            base.OnModelCreating(builder);
+        }
     }
 }
