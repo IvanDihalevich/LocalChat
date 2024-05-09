@@ -49,7 +49,7 @@ namespace LocalChat.Repository.Services
 
         public async Task<IEnumerable<Message>> GetAllByChatRoomId(Guid id)
         {
-            return await _dbContext.Messages
+            return await _dbContext.Messages.Include(m => m.Sender)
                .Where(m => m.ChatRoomId == id)
                .ToListAsync();
         }

@@ -13,7 +13,7 @@ using System.Security.Claims;
 
 namespace LocalChat.UI.Controllers
 {
-    [Authorize]  // Require authentication
+    [Authorize]  
     public class MessageController : Controller
     {
         private readonly ChatDbContext _dbContext;

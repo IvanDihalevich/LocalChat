@@ -48,29 +48,17 @@ else
         @foreach (var message in Model)
         {
             var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            <div class="message @(message.SenderId == currentUserId ? "sent-by-user" : "")">
+            var isSentByCurrentUser = message.SenderId == currentUserId;
+            var senderName = isSentByCurrentUser ? User.Identity.Name : message.Sender.Email;
+            <div class="message @(isSentByCurrentUser ? "sent-by-user" : "")">
                 <div class="message-sender">
-                    @if (message.SenderId == null)
-                    {
-                        <span class="unknown-sender">Невідомо</span>
-                    }
-                    else
-                    {
-                        <span>@message.SenderId</span>
-                    }
+                    <span>@senderName</span>
                 </div>
                 <div class="message-text">
                     @message.Text
                 </div>
                 <div>
-                    @if (message.SendTime == null)
-                    {
-                        <span class="unknown-time">Невідомо</span>
-                    }
-                    else
-                    {
-                        <span>@message.SendTime</span>
-                    }
+                    <span>@message.SendTime ??</span>
                 </div>
             </div>
         }
