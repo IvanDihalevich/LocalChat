@@ -27,31 +27,32 @@ namespace LocalChat.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid id)
         {
-            var messages = await _messageService.GetAll();
+            ViewData["ChatRoomId"] = id;
+            var messages = await _messageService.GetAllByChatRoomId(id);
             return View(messages);
         }
 
         [HttpGet]
         public IActionResult Create(Guid id)
         {
+            ViewData["ChatRoomId"] = id;
             return View(new Message() { ChatRoomId = id });
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Message model)
         {
             if (ModelState.IsValid)
             {
                 await _messageService.AddMessageAsync(model); // Виклик методу AddMessageAsync вашого сервісу
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { id = model.ChatRoomId });
             }
 
-            return View(model);
+            return RedirectToAction("Index", new { id = model.ChatRoomId });
         }
-
 
 
 

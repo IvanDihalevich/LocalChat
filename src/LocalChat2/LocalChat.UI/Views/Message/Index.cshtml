@@ -1,4 +1,6 @@
-﻿@model IEnumerable<LocalChat.Core.Entities.Message>
+﻿@using System.Security.Claims
+@using LocalChat.Core.Entities
+@model IEnumerable<LocalChat.Core.Entities.Message>
 
 @{
     ViewData["Title"] = "Чат";
@@ -7,7 +9,7 @@
 <h1>Чат</h1>
 
 <!-- Button to add a new message -->
-<a href="@Url.Action("Create", "Message")" class="btn btn-primary">Додати нове повідомлення</a>
+<a href="@Url.Action("Index", "ChatRoom")" class="btn btn-primary">Додати нове повідомлення</a>
 
 @if (Model == null || !Model.Any())
 {
@@ -56,4 +58,19 @@ else
             }
         </tbody>
     </table>
+
+    <footer>
+        <form asp-controller="Message" asp-action="Create">
+            <input type="hidden" name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+            <input type="hidden" name="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
+            <input type="text" disabled name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+
+            <div class="form-group">
+                <label for="Text">Текст повідомлення:</label>
+                <input type="text" class="form-control" name="Text" />
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+        </form>
+    </footer>
+
 }

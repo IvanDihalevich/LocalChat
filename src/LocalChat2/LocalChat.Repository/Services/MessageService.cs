@@ -47,6 +47,13 @@ namespace LocalChat.Repository.Services
             return _dbContext.Messages.FirstOrDefault(m => m.Id == messageId);
         }
 
+        public async Task<IEnumerable<Message>> GetAllByChatRoomId(Guid id)
+        {
+            return await _dbContext.Messages
+               .Where(m => m.ChatRoomId == id)
+               .ToListAsync();
+        }
+
         public List<Message> GetMessagesBySenderId(Guid senderId)
         {
             return _dbContext.Messages.Where(m => m.SenderId == senderId).ToList();

@@ -18,5 +18,6 @@ namespace LocalChat.Repository.Services
         Task AddMessageAsync(Message message);
         void DeleteMessage(Guid id);
         Task<IEnumerable<Message>> GetAll();
+        Task<IEnumerable<Message>> GetAllByChatRoomId(Guid id);
     }
 }
