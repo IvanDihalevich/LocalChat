@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace LocalChat.Repository.Models
+namespace LocalChat.Repository.Model
 {
     public class UserListItemModel
     {

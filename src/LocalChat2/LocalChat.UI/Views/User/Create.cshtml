@@ -1,53 +1,38 @@
-﻿<h1>Новий користувач</h1>
+﻿﻿@using LocalChat.Repository.Model
+@model UserCreateModel
 
-<a href="#" id="createUserButton" class="btn btn-primary float-end">Створити</a>
+<div class="float-end">
+    <a href="/user/index" class="btn btn-outline-dark">Повернутися до списку</a>
+</div>
+<h1>Новий користувач</h1>
+<hr />
+<div class="row">
 
-<div id="createUserForm" style="display: none;">
-    <h2>Створити нового користувача</h2>
-    <form id="userForm">
-        <div class="form-group">
-            <label for="fullName">Повне ім'я:</label>
-            <input type="text" class="form-control" id="fullName" name="fullName">
+    <form asp-action="Create" class="col-md-4">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label"></label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
-
-        //<button type="submit" class="btn btn-primary">Створити користувача</button>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" type="text" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Створити</button>
+        </div>
     </form>
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $("#createUserButton").click(function (event) {
-                event.preventDefault(); 
-
-                $("#createUserForm").toggle();
-            });
-
-            $("#userForm").submit(function (event) {
-                event.preventDefault();
-
-                var formData = {
-                    fullName: $("#fullName").val(),
-                    email: $("#email").val()
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/User/Create",
-                    data: formData,
-                    success: function (response) {
-                        location.reload();
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-

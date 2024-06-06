@@ -9,136 +9,81 @@ using Microsoft.AspNetCore.Authorization;
 using LocalChat.Repository.UserRepositories;
 using Microsoft.AspNetCore.Identity;
 using LocalChat.UI.Areas.Identity.Pages.Account;
+using LocalChat.Repository.Model;
 
 
 namespace LocalChat.WebUI.Controllers
 {
-    public class UserController : Controller
-    {
-        private readonly IUserService _userService;
-        private readonly IUserRepository userRepository;
-        private readonly SignInManager<User> _signInManager;
-        public UserController(IUserService userService, IUserRepository userRepository, SignInManager<User> signInManager)
+        public class UserController : Controller
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        }
-
-
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
-        {
-            var usersWithRoles = await userRepository.GetAllWithRolesAsync();  // Отримуємо потрібний формат
-            return View(usersWithRoles);  // Передаємо дані у правильному форматі
-        }
-        [HttpGet]
-        public IActionResult Message()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        public IActionResult Details(Guid id)
-        {
-            var user = _userService.GetUserById(id);
-            return View(user);
-        }
-
-        [HttpPost]
-        public IActionResult Create(User user)
-        {
-            if (ModelState.IsValid)
+            private readonly IUserRepository userRepository;
+            public UserController(IUserRepository userRepository)
             {
-                _userService.AddUser(user);
-                Console.WriteLine("Created user");
-                return RedirectToAction(nameof(Index));
-            }
-            else Console.WriteLine("Not");
-            return View(user);
-        }
-
-        public IActionResult Edit(Guid id)
-        {
-            var user = _userService.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
+                this.userRepository = userRepository;
             }
 
-            if (ModelState.IsValid)
+            [Authorize(Roles = "Admin")]
+            public async Task<IActionResult> Index()
             {
-                try
+                return View(await userRepository.GetAllWithRolesAsync());
+            }
+
+            [Authorize(Roles = "Admin")]
+            [HttpGet]
+            public IActionResult Create()
+            {
+                return View(new UserCreateModel());
+            }
+
+            [Authorize(Roles = "Admin")]
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create(UserCreateModel model)
+            {
+                if (ModelState.IsValid)
                 {
-                    _userService.UpdateUser(user);
-                }
-                catch (Exception)
-                {
-                    if (!_userService.UserExists(id))
+                    var user = await userRepository.CreateWithPasswordAsync(model);
+
+                    if (user != null)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        return RedirectToAction(nameof(Edit), new { id = user.Id });
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return View(new UserCreateModel());
             }
-            return View(user);
-        }
 
-        [HttpPost]
-        public async Task<int> CheckDelete(Guid id)
-        {
-            var check = await userRepository.CheckUser(id);
-            return check ? 1 : 0;
-        }
-
-        [HttpDelete]
-        public async Task Delete(Guid id)
-        {
-            await userRepository.DeleteUser(id);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel.InputModel model)
-        {
-            if (ModelState.IsValid)
+            [HttpGet]
+            public async Task<IActionResult> Edit(Guid id)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    // Successful login, redirect to the desired page
-                    return RedirectToAction("Index", "Home"); // Example
-                }
-                else
-                {
-                    // Invalid login attempt, display error message
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt");
-                    return View(model);
-                }
+                ViewBag.Roles = await userRepository.GetRolesAsync();
+                return View(await userRepository.GetOneWithRolesAsync(id));
             }
-            // Invalid input data, redisplay the login form with errors
-            return View(model);
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(UserListItemModel model, string[] roles)
+            {
+                if (ModelState.IsValid)
+                {
+                    await userRepository.UpdateUserAsync(model, roles);
+                    return RedirectToAction("Index");
+                }
+                ViewBag.Roles = await userRepository.GetRolesAsync();
+                return View(model);
+            }
+
+            [HttpPost]
+            public async Task<int> CheckDelete(Guid id)
+            {
+                var check = await userRepository.CheckUser(id);
+                return check ? 1 : 0;
+            }
+
+            [HttpDelete]
+            public async Task Delete(Guid id)
+            {
+                await userRepository.DeleteUser(id);
+            }
         }
     }
-}

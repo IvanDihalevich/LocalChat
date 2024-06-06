@@ -1,7 +1,6 @@
 ﻿using LocalChat.Core.Entities;
 using LocalChat.Repository.IEntity.Services;
 using LocalChat.Repository.Model;
-using LocalChat.Repository.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

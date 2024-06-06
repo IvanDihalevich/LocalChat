@@ -1,7 +1,8 @@
-﻿@using LocalChat.Repository.Models
+﻿﻿@using LocalChat.Repository.Model
 
 @model IEnumerable<UserListItemModel>
 
+<a href="/user/create" class="btn btn-primary float-end">Створити</a>
 
 <h1>Користувачі</h1>
 
@@ -11,6 +12,7 @@
             <th>Full Name</th>
             <th>Email</th>
             <th>Roles</th>
+            <th>Confirmed</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -22,11 +24,11 @@
                 <td>@u.Email</td>
 
                 <td>@string.Join(", ", u.Roles)</td>
+                <td><input class="form-check-input" @(u.IsEmailConfirmed ? "checked" : "") type="checkbox" disabled></td>
                 <td>
                     <a href="/user/edit/@u.Id" class="btn btn-warning">Edit</a>
                     <a href="#" data-id="@u.Id" data-email="@u.Email" class="btn btn-danger btn-remove-user">Remove</a>
                 </td>
-
             </tr>
         }
     </tbody>
