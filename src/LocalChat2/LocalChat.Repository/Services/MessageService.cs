@@ -58,6 +58,10 @@ namespace LocalChat.Repository.Services
         {
             return _dbContext.Messages.Where(m => m.SenderId == senderId).ToList();
         }
+        public List<Message> GetAllMessagesByReciverId(Guid reciverId)
+        {
+            return _dbContext.Messages.Where(x=>x.ReciverId == reciverId).ToList();
+        }
 
         public List<Message> GetMessagesBySendTime(DateTime sendTime)
         {

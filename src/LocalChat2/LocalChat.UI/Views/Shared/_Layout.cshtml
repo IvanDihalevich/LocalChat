@@ -49,10 +49,9 @@
                                 </a>
                             </li>
                         }
-
-                        @if (User.IsInRole("Admin"))
+                        @if(User.IsInRole("Admin"))
                         {
-                            <li>
+                        <li>
 
                                 <a class="sidenav-item-link" href="/User">
                                     <i class="fa-solid fa-user-group"></i>
@@ -60,7 +59,16 @@
                                 </a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                        {
+                            <li>
 
+                                <a class="sidenav-item-link" href="/User/Friends">
+                                    <i class="fa-solid fa-user-group"></i>
+                                    <span class="nav-text">Friends</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                 </div>

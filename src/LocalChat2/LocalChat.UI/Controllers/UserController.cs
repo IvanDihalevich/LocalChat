@@ -17,9 +17,12 @@ namespace LocalChat.WebUI.Controllers
         public class UserController : Controller
         {
             private readonly IUserRepository userRepository;
-            public UserController(IUserRepository userRepository)
+            private readonly IMessageService messageRepository;
+
+        public UserController(IUserRepository userRepository, IMessageService _messageRepository)
             {
                 this.userRepository = userRepository;
+            this.messageRepository = _messageRepository;
             }
 
             [Authorize(Roles = "Admin")]
@@ -27,8 +30,13 @@ namespace LocalChat.WebUI.Controllers
             {
                 return View(await userRepository.GetAllWithRolesAsync());
             }
+        [HttpGet]
+        public async Task<IActionResult> Friends()
+        {
+            return View(await userRepository.GetAllWithRolesAsync());
+        }
 
-            [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
             [HttpGet]
             public IActionResult Create()
             {
@@ -72,8 +80,29 @@ namespace LocalChat.WebUI.Controllers
                 ViewBag.Roles = await userRepository.GetRolesAsync();
                 return View(model);
             }
+        [HttpGet]
+        public async Task<IActionResult> Text(Guid id)
+        {
+            ViewData["ReciverId"] = id;
+            ViewBag.Messages = messageRepository.GetAllMessagesByReciverId(id);
+            return View();
+        }
 
-            [HttpPost]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Text(Message message, Guid id)
+        {
+            ViewData["SenderId"] = id;
+            if (ModelState.IsValid)
+            {
+                await messageRepository.AddMessageAsync(message);
+                return RedirectToAction("Text");
+            }
+            ViewBag.Messages = messageRepository.GetAllMessagesByReciverId(id);
+            return View();
+        }
+
+        [HttpPost]
             public async Task<int> CheckDelete(Guid id)
             {
                 var check = await userRepository.CheckUser(id);

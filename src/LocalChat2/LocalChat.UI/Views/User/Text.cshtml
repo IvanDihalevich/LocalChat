@@ -1,0 +1,40 @@
+﻿@using LocalChat.Core.Entities
+@using System.Security.Claims
+@inject LocalChat.Repository.Services.IUserService UserService
+@model Message
+@{
+    var messages = ViewBag.Messages as List<Message>;
+}
+<h1>Повідомлення</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Текст</th>
+            <th>Friend Name</th>
+            <th>Date</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in messages)
+        {
+            <tr>
+                <td>@u.Text</td>
+                <td>@UserService.GetUserNameById(u.ReciverId)</td>
+                <td>@u.SendTime</td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+ <form asp-action="Text">
+ <input type="hidden" asp-for="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
+<input type="text" asp-for="Text" class="form-check-input" /><br>
+    <input type="hidden" asp-for="ReciverId" value="@ViewData["ReciverId"]" />
+    <input type="hidden" asp-for="SendTime" value="@DateTime.Now" />
+<button class="btn btn-primary" type="submit">Зберегти</button>
+</form>
+</div>
+

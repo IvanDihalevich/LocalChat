@@ -15,7 +15,9 @@ namespace LocalChat.Core.Entities
         public User? Sender { get; set; }
         public string Text { get; set; }
         public DateTime SendTime { get; set; } = DateTime.Now;
-        public Guid ChatRoomId { get; set; }
+        public Guid? ChatRoomId { get; set; }
+        public Guid? ReciverId { get; set; }
+
         public ChatRoom? ChatRoom { get; set; }
     }
 }

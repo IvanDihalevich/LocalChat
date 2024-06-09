@@ -10,9 +10,12 @@
     <thead>
         <tr>
             <th>Full Name</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Confirmed</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Confirmed</th>
+            }
             <th>Actions</th>
         </tr>
     </thead>
@@ -21,6 +24,8 @@
         {
             <tr>
                 <td>@u.FullName</td>
+                @if (User.IsInRole("Admin"))
+                {
                 <td>@u.Email</td>
 
                 <td>@string.Join(", ", u.Roles)</td>
@@ -29,6 +34,7 @@
                     <a href="/user/edit/@u.Id" class="btn btn-warning">Edit</a>
                     <a href="#" data-id="@u.Id" data-email="@u.Email" class="btn btn-danger btn-remove-user">Remove</a>
                 </td>
+                }
             </tr>
         }
     </tbody>
