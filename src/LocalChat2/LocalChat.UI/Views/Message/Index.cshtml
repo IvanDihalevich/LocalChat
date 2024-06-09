@@ -31,6 +31,24 @@
         align-self: flex-end; /* розташовуємо праворуч */
         background-color: #d9ead3; /* колір фону для повідомлень, відправлених користувачем */
     }
+
+    .form-container {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+
+    .btn-warning {
+        flex-shrink: 0;
+    }
 </style>
 
 <h1>Чат</h1>
@@ -65,17 +83,14 @@ else
     </div>
 }
 
-<div>
-    <form asp-controller="Message" asp-action="Create">
+<div class="form-container">
+    <form asp-controller="Message" asp-action="Create" class="form-inline" style="width: 100%;">
         <input type="hidden" name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
         <input type="hidden" name="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
-        <input type="text" disabled name="ChatRoomId" value="@ViewData["ChatRoomId"]" />
+        @* <input type="text" disabled name="ChatRoomId" value="@ViewData["ChatRoomId"]" class="form-control" /> *@
 
-        <div class="form-group">
-            <label for="Text">Текст повідомлення:</label>
-            <input type="text" class="form-control" name="Text" />
-        </div>
-        <button type="submit" class="btn btn-primary">Зберегти</button>
+        <input type="text" class="form-control" name="Text" placeholder="Введіть повідомлення..." />
+        <button type="submit" class="btn btn-primary">Надіслати</button>
     </form>
 </div>
 
