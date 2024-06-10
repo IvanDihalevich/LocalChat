@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,10 @@ namespace LocalChat.Repository.DependencyInjection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
+			services.AddScoped<IPostService, PostService>();
+			services.AddScoped<ICommentService, CommentService>();
+			services.AddScoped<ICommentReactionService, CommentReactionService>();
+			services.AddScoped<IPostReactionService, PostReactionService>();
 
             services.AddScoped<RoleManager<IdentityRole<Guid>>>();
             

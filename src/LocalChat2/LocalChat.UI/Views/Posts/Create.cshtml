@@ -1,0 +1,24 @@
+﻿@using LocalChat.Core.Entities
+@using System.Security.Claims
+@model Post
+<form asp-action="Create" asp-asp-controller="Posts" enctype="multipart/form-data" method="post">
+	<div>
+		<input asp-for="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" hidden />
+	</div>
+	<div>
+		<label>Title</label>
+		<input asp-for="Title" type="text" requrired/>
+	</div>
+	<div>
+		<label>Photo</label>
+		<input asp-for="Photo" type="file" accept="image/*" class="form-control-file" required/>
+	</div>
+	<div>
+		<label>Desc</label>
+		<input asp-for="Text" type="text" required />
+	</div>
+	<div>
+		<input asp-for="Likes" value="0" hidden />
+	</div>
+	<button class="btn btn-secondary" type="submit">Post</button>
+</form>

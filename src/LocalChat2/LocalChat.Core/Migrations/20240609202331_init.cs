@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class ini : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -173,6 +173,28 @@ namespace LocalChat.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Posts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Likes = table.Column<int>(type: "int", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Posts_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChatRoomUsers",
                 columns: table => new
                 {
@@ -229,8 +251,8 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("0ce5723a-97e8-4218-8b89-6708cdcd3fdc"), "0ce5723a-97e8-4218-8b89-6708cdcd3fdc", "Admin", "ADMIN" },
-                    { new Guid("55f6d2b3-2242-4f6b-817c-944e68167072"), "55f6d2b3-2242-4f6b-817c-944e68167072", "User", "USER" }
+                    { new Guid("4120ea78-0581-4c00-bc98-713eed37adef"), "4120ea78-0581-4c00-bc98-713eed37adef", "User", "USER" },
+                    { new Guid("8dc110a6-db66-4adc-8037-7f1c6e04e079"), "8dc110a6-db66-4adc-8037-7f1c6e04e079", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -238,22 +260,22 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("32fa78e0-9b73-4996-980a-914fed997b9e"), 0, "ce7545a4-73aa-4926-af4e-3b374a707cf8", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEE32BDQQq/MYkK+SdL+sXZM6HKxEsS/XlevFK2120TwXpwzNfkJzuvoW6BfFqpPHGA==", null, false, "4a91b3d7-27a1-49b2-8759-c14c597e7199", false, "admin@localchat.example" },
-                    { new Guid("87000982-4a25-4208-9218-cdb2666e0f55"), 0, "9d64cdbc-dcf2-4400-ae2f-f250f075af49", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEEUhX4tWUsfFwPKyCr48rOsQykyCnGaawpipAO+tybWOibXGh+qODm5C8aY4OQ2LIg==", null, false, "b7849d32-0a97-4a78-9c75-e509103a9b87", false, "user@localchat.example" }
+                    { new Guid("6e6f4fca-668b-4007-a59b-41aeb5e9484a"), 0, "480edad4-5110-4de9-8bb8-28652df1dd09", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAELjqzbLeS8WlEIGGTSq6BLxAibCDdWgaBTVYqLlDZyD8OgV0nTmLXWz5MS+5BpopKw==", null, false, "40523b10-6621-4486-a8d4-49b6a04b5e0f", false, "admin@localchat.example" },
+                    { new Guid("fb90833b-72d7-4f3d-922a-bf7df0182840"), 0, "3c353e45-cca7-4576-95a2-4e4b102c7bdd", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEGEslqxbDIWcy+i1MkJAly5AdfxYl6mW/z4VRzCZM+aXWBoPPD2GDWAQ3uYAzETqzQ==", null, false, "41d7691b-8102-4258-a657-0200b067998a", false, "user@localchat.example" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ChatRooms",
                 columns: new[] { "Id", "MessageID", "Name" },
-                values: new object[] { new Guid("cb980a41-134f-4f7d-9eb7-385a016592b8"), null, "General" });
+                values: new object[] { new Guid("3cce4336-813d-411f-9c6b-d9e271136757"), null, "General" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("0ce5723a-97e8-4218-8b89-6708cdcd3fdc"), new Guid("32fa78e0-9b73-4996-980a-914fed997b9e") },
-                    { new Guid("55f6d2b3-2242-4f6b-817c-944e68167072"), new Guid("87000982-4a25-4208-9218-cdb2666e0f55") }
+                    { new Guid("8dc110a6-db66-4adc-8037-7f1c6e04e079"), new Guid("6e6f4fca-668b-4007-a59b-41aeb5e9484a") },
+                    { new Guid("4120ea78-0581-4c00-bc98-713eed37adef"), new Guid("fb90833b-72d7-4f3d-922a-bf7df0182840") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -314,6 +336,11 @@ namespace LocalChat.Core.Migrations
                 name: "IX_Messages_SenderId",
                 table: "Messages",
                 column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_SenderId",
+                table: "Posts",
+                column: "SenderId");
         }
 
         /// <inheritdoc />
@@ -341,13 +368,16 @@ namespace LocalChat.Core.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
+                name: "Posts");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "ChatRooms");
 
             migrationBuilder.DropTable(
-                name: "ChatRooms");
+                name: "AspNetUsers");
         }
     }
 }

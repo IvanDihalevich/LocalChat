@@ -1,0 +1,108 @@
+﻿@model DiscussionViewModel
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="post">
+    <h2>@Model.Post.Title</h2>
+    <p>@Model.Post.Text</p>
+    <p><strong>By:</strong> @Model.Post.Sender?.FullName on @Model.Post.CreateDateTime</p>
+    <img class="w-50" src="@Model.Post.ImagePath" alt="Post Image" />
+    <div class="d-flex" style="gap: 15px;">
+        <p><strong>Likes:</strong> @Model.Post.Likes</p>
+        <p><strong>Dislikes:</strong> @Model.Post.Dislikes</p>
+    </div>
+    <div>
+        <form asp-action="LikePost" asp-controller="Posts" method="post" style="display: inline;">
+            <input type="hidden" name="postId" value="@Model.Post.Id" />
+            <button type="submit">
+                <span>
+                    <i class="fas fa-lg fa-thumbs-up m-2 p-1 text-success"></i>
+                </span>
+            </button>
+        </form>
+        <form asp-action="DislikePost" asp-controller="Posts" method="post" style="display: inline;">
+            <input type="hidden" name="postId" value="@Model.Post.Id" />
+            <button type="submit">
+                <span>
+                    <i class="fas fa-lg fa-thumbs-down m-2 p-1 text-danger"></i>
+                </span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="comments">
+    <h3>Comments</h3>
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        <div class="d-flex flex-column mx-3 my-5" style="gap: 15px">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="comment" style="position: relative;">
+                    <p>@comment.Content</p>
+                    <p><strong>By:</strong> @comment.Sender?.FullName on @comment.CreationTime</p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <form asp-action="DeleteComment" asp-controller="Posts" method="post" style="position: absolute; right: 0; top: 0;">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <input type="hidden" name="postId" value="@Model.Post.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    }
+                    <div class="d-flex" style="gap: 25px;">
+                        <form asp-action="LikeComment" asp-controller="Posts" method="post" style="display: inline;">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <input type="hidden" name="postId" value="@Model.Post.Id" />
+                            <div class="d-flex align-items-center">
+                                <button type="submit">
+                                    <span>
+                                        <i class="fas fa-sm fa-thumbs-up m-2 p-1 text-success"></i>
+                                    </span>
+                                </button>
+                                <div>
+                                    <p><strong>@comment.CommentReactions.Where(r => r.Reaction == 1).Count()</strong></p>
+                                </div>
+                            </div>
+                        </form>
+                        <form asp-action="DislikeComment" asp-controller="Posts" method="post" style="display: inline;">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <input type="hidden" name="postId" value="@Model.Post.Id" />
+                            <div class="d-flex align-items-center">
+                                <button type="submit">
+                                    <span>
+                                        <i class="fas fa-sm fa-thumbs-down m-2 p-1 text-danger"></i>
+                                    </span>
+                                </button>
+                                <div>
+                                    <p><strong>@comment.CommentReactions.Where(r => r.Reaction == -1).Count()</strong></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No comments yet.</p>
+    }
+</div>
+
+<div class="add-comment">
+    <h3>Leave a Comment</h3>
+    <form asp-action="AddComment" asp-controller="Posts" method="post">
+        <input type="hidden" asp-for="NewComment.PostId" />
+        <div class="form-group">
+            <label asp-for="NewComment.Content"></label>
+            <textarea asp-for="NewComment.Content" class="form-control"></textarea>
+            <span asp-validation-for="NewComment.Content" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

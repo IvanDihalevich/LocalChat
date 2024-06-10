@@ -61,5 +61,10 @@ namespace LocalChat.Repository.Services
             // Реалізація перевірки існування користувача за ідентифікатором
             return _dbContext.Users.Any(u => u.Id == id);
         }
-    }
+
+		public User GetUserByEmail(string userEmail)
+		{
+            return _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+		}
+	}
 }
