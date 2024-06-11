@@ -18,13 +18,13 @@ namespace LocalChat.Core.Entities
 		public Guid? SenderId { get; set; }
         public string Text { get; set; }
         public string Title { get; set; }
-        public int Likes { get; set; }
+        public int? Likes { get; set; }
         public string? ImagePath { get; set; } = "img/image/no_photo.jpg";
 		[NotMapped]
 		public IFormFile? Photo { get; set; }
-        public virtual ICollection<PostReaction> PostReactions { get; set; }
-        public virtual ICollection<Comment> Comments{ get; set; }
+        public virtual ICollection<PostReaction> PostReactions { get; set; } = new List<PostReaction>();
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
         [NotMapped]
-        public int Dislikes { get; set; }
+        public int? Dislikes { get; set; }
 	}
 }

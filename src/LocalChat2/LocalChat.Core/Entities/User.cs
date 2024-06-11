@@ -11,8 +11,8 @@ namespace LocalChat.Core.Entities
     public class User : IdentityUser<Guid>, IEntity<Guid>
     {
         public string? FullName { get; set; }
-		public virtual ICollection<PostReaction> PostReactions { get; set; }
-		public virtual ICollection<CommentReaction> CommentReactions { get; set; }
-		public virtual ICollection<Comment> Comments{ get; set; }
+		public virtual ICollection<PostReaction> PostReactions { get; set; } = new List<PostReaction>();
+		public virtual ICollection<CommentReaction> CommentReactions { get; set; } = new List<CommentReaction>();
+		public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 	}
 }

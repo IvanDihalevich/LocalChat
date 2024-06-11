@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LocalChat.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,7 +181,7 @@ namespace LocalChat.Core.Migrations
                     SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Likes = table.Column<int>(type: "int", nullable: false),
+                    Likes = table.Column<int>(type: "int", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -246,13 +246,86 @@ namespace LocalChat.Core.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostReactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Reaction = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostReactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostReactions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PostReactions_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CommentReactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Reaction = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentReactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommentReactions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CommentReactions_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("4120ea78-0581-4c00-bc98-713eed37adef"), "4120ea78-0581-4c00-bc98-713eed37adef", "User", "USER" },
-                    { new Guid("8dc110a6-db66-4adc-8037-7f1c6e04e079"), "8dc110a6-db66-4adc-8037-7f1c6e04e079", "Admin", "ADMIN" }
+                    { new Guid("19395eca-c032-430b-baa2-14efcb52aefb"), "19395eca-c032-430b-baa2-14efcb52aefb", "Admin", "ADMIN" },
+                    { new Guid("ecd4248c-c3be-4059-84e7-5e3b313bca47"), "ecd4248c-c3be-4059-84e7-5e3b313bca47", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -260,22 +333,22 @@ namespace LocalChat.Core.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("6e6f4fca-668b-4007-a59b-41aeb5e9484a"), 0, "480edad4-5110-4de9-8bb8-28652df1dd09", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAELjqzbLeS8WlEIGGTSq6BLxAibCDdWgaBTVYqLlDZyD8OgV0nTmLXWz5MS+5BpopKw==", null, false, "40523b10-6621-4486-a8d4-49b6a04b5e0f", false, "admin@localchat.example" },
-                    { new Guid("fb90833b-72d7-4f3d-922a-bf7df0182840"), 0, "3c353e45-cca7-4576-95a2-4e4b102c7bdd", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEGEslqxbDIWcy+i1MkJAly5AdfxYl6mW/z4VRzCZM+aXWBoPPD2GDWAQ3uYAzETqzQ==", null, false, "41d7691b-8102-4258-a657-0200b067998a", false, "user@localchat.example" }
+                    { new Guid("65913f9e-a072-46f6-a3be-621f1cdeede0"), 0, "ef433189-a85a-4b6d-ab03-435ef4a4bf40", "admin@localchat.example", true, "Admin User", false, null, "ADMIN@LOCALCHAT.EXAMPLE", "ADMIN@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAEIcdOse1VYQAUHTDFqGbGEyePYtxdQNuCMU/25OUsayM//+Ulvekn251YDa+92U0pQ==", null, false, "ae2ce967-374e-4843-981d-3a2a39f5e87f", false, "admin@localchat.example" },
+                    { new Guid("8c959f21-b912-4bcc-b0aa-bc348acff676"), 0, "555af223-978a-4c25-8473-f8181d6a6fe8", "user@localchat.example", true, "Regular User", false, null, "USER@LOCALCHAT.EXAMPLE", "USER@LOCALCHAT.EXAMPLE", "AQAAAAIAAYagAAAAELG4rWYu7saeIY9S+bKd/D46uH1aqehZQjhY0+L/gY53S3QEfVmVIVYd3RExTTOhaw==", null, false, "19f40ac0-f591-4f2f-b432-150f84ffeaaa", false, "user@localchat.example" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ChatRooms",
                 columns: new[] { "Id", "MessageID", "Name" },
-                values: new object[] { new Guid("3cce4336-813d-411f-9c6b-d9e271136757"), null, "General" });
+                values: new object[] { new Guid("b111d878-817b-40fa-b22c-f36be15f084c"), null, "General" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("8dc110a6-db66-4adc-8037-7f1c6e04e079"), new Guid("6e6f4fca-668b-4007-a59b-41aeb5e9484a") },
-                    { new Guid("4120ea78-0581-4c00-bc98-713eed37adef"), new Guid("fb90833b-72d7-4f3d-922a-bf7df0182840") }
+                    { new Guid("19395eca-c032-430b-baa2-14efcb52aefb"), new Guid("65913f9e-a072-46f6-a3be-621f1cdeede0") },
+                    { new Guid("ecd4248c-c3be-4059-84e7-5e3b313bca47"), new Guid("8c959f21-b912-4bcc-b0aa-bc348acff676") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -328,6 +401,26 @@ namespace LocalChat.Core.Migrations
                 column: "userId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommentReactions_CommentId",
+                table: "CommentReactions",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommentReactions_UserId",
+                table: "CommentReactions",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_PostId",
+                table: "Comments",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_SenderId",
+                table: "Comments",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatRoomId",
                 table: "Messages",
                 column: "ChatRoomId");
@@ -336,6 +429,16 @@ namespace LocalChat.Core.Migrations
                 name: "IX_Messages_SenderId",
                 table: "Messages",
                 column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostReactions_PostId",
+                table: "PostReactions",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostReactions_UserId",
+                table: "PostReactions",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_SenderId",
@@ -365,16 +468,25 @@ namespace LocalChat.Core.Migrations
                 name: "ChatRoomUsers");
 
             migrationBuilder.DropTable(
+                name: "CommentReactions");
+
+            migrationBuilder.DropTable(
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "PostReactions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "ChatRooms");
+
+            migrationBuilder.DropTable(
+                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

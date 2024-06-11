@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LocalChat.Repository.Services;
 using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
 
 namespace LocalChat.UI.Controllers
@@ -19,12 +20,14 @@ namespace LocalChat.UI.Controllers
         private readonly ChatDbContext _dbContext;
         private readonly UserManager<User> _userManager;
         private readonly IMessageService _messageService;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public MessageController(ChatDbContext dbContext, UserManager<User> userManager, IMessageService messageService)
+        public MessageController(ChatDbContext dbContext, UserManager<User> userManager, IMessageService messageService, IHubContext<ChatHub> hubContext)
         {
             _dbContext = dbContext;
             _userManager = userManager;
             _messageService = messageService;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index(Guid id)
@@ -49,13 +52,15 @@ namespace LocalChat.UI.Controllers
             if (ModelState.IsValid)
             {
                 await _messageService.AddMessageAsync(model); // Виклик методу AddMessageAsync вашого сервісу
+
+                // Send the message to the SignalR hub
+                await _hubContext.Clients.Group(model.ChatRoomId.ToString())
+                    .SendAsync("ReceiveMessage", model.SenderId, model.Text, model.ChatRoomId);
+
                 return RedirectToAction("Index", new { id = model.ChatRoomId });
             }
 
             return RedirectToAction("Index", new { id = model.ChatRoomId });
         }
-
-
-
     }
 }

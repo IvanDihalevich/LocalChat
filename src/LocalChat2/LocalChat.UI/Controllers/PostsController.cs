@@ -79,8 +79,8 @@ namespace LocalChat.UI.Controllers
 				Comments = comments,
 				NewComment = new Comment { PostId = id }
 			};
-            post.Likes = (await _postReactionService.GetReactionListAsync()).Where(r => r.Reaction == 1).Count();
-            post.Dislikes = (await _postReactionService.GetReactionListAsync()).Where(r => r.Reaction == -1).Count();
+            post.Likes = (await _postReactionService.GetReactionListAsync()).Where(r => r.PostId == id && r.Reaction == 1).Count();
+            post.Dislikes = (await _postReactionService.GetReactionListAsync()).Where(r => r.PostId == id && r.Reaction == -1).Count();
 
 			return View(model);
 		}

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LocalChat.Core.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20240610144748_AddReactions")]
-    partial class AddReactions
+    [Migration("20240611141301_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7bbba4ad-e637-427b-af5d-c6349cbc9b47"),
+                            Id = new Guid("b111d878-817b-40fa-b22c-f36be15f084c"),
                             Name = "General"
                         });
                 });
@@ -80,6 +80,9 @@ namespace LocalChat.Core.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("PostId")
                         .HasColumnType("uniqueidentifier");
@@ -163,7 +166,7 @@ namespace LocalChat.Core.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Likes")
+                    b.Property<int?>("Likes")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("SenderId")
@@ -279,35 +282,35 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("040730e5-e363-41fb-9d18-a600e4e67b21"),
+                            Id = new Guid("65913f9e-a072-46f6-a3be-621f1cdeede0"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f72d381c-5f83-446e-97f7-28d43bcc78c8",
+                            ConcurrencyStamp = "ef433189-a85a-4b6d-ab03-435ef4a4bf40",
                             Email = "admin@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Admin User",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALCHAT.EXAMPLE",
                             NormalizedUserName = "ADMIN@LOCALCHAT.EXAMPLE",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIq3gD6ewDHU226LTYNayUjyNFhzuQLAUB0hDb8eGyH0rblwADlF/vXmccUlDYc52w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIcdOse1VYQAUHTDFqGbGEyePYtxdQNuCMU/25OUsayM//+Ulvekn251YDa+92U0pQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5d5c33d6-9d29-4e66-a69c-7558cf43c228",
+                            SecurityStamp = "ae2ce967-374e-4843-981d-3a2a39f5e87f",
                             TwoFactorEnabled = false,
                             UserName = "admin@localchat.example"
                         },
                         new
                         {
-                            Id = new Guid("d00108bf-fb85-4064-9df7-2c79ea41313b"),
+                            Id = new Guid("8c959f21-b912-4bcc-b0aa-bc348acff676"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "150c0745-3efd-41a5-bb8a-4d36f2458e55",
+                            ConcurrencyStamp = "555af223-978a-4c25-8473-f8181d6a6fe8",
                             Email = "user@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Regular User",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALCHAT.EXAMPLE",
                             NormalizedUserName = "USER@LOCALCHAT.EXAMPLE",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGQ5/PqTABEbfVD4RmMmRsAoIqyGX6DXKCVw9Xg2Bq5m9Hs/IjsQvGIOOaMd+oxT4w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELG4rWYu7saeIY9S+bKd/D46uH1aqehZQjhY0+L/gY53S3QEfVmVIVYd3RExTTOhaw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "022a4c38-2f7f-47f3-8760-270cfebe0d15",
+                            SecurityStamp = "19f40ac0-f591-4f2f-b432-150f84ffeaaa",
                             TwoFactorEnabled = false,
                             UserName = "user@localchat.example"
                         });
@@ -343,15 +346,15 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9d8bcdb5-b1ab-4452-b0eb-6095b695ddd5"),
-                            ConcurrencyStamp = "9d8bcdb5-b1ab-4452-b0eb-6095b695ddd5",
+                            Id = new Guid("19395eca-c032-430b-baa2-14efcb52aefb"),
+                            ConcurrencyStamp = "19395eca-c032-430b-baa2-14efcb52aefb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("5efa5128-634f-4f83-bac3-d7042b2a8d26"),
-                            ConcurrencyStamp = "5efa5128-634f-4f83-bac3-d7042b2a8d26",
+                            Id = new Guid("ecd4248c-c3be-4059-84e7-5e3b313bca47"),
+                            ConcurrencyStamp = "ecd4248c-c3be-4059-84e7-5e3b313bca47",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -445,13 +448,13 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("040730e5-e363-41fb-9d18-a600e4e67b21"),
-                            RoleId = new Guid("9d8bcdb5-b1ab-4452-b0eb-6095b695ddd5")
+                            UserId = new Guid("65913f9e-a072-46f6-a3be-621f1cdeede0"),
+                            RoleId = new Guid("19395eca-c032-430b-baa2-14efcb52aefb")
                         },
                         new
                         {
-                            UserId = new Guid("d00108bf-fb85-4064-9df7-2c79ea41313b"),
-                            RoleId = new Guid("5efa5128-634f-4f83-bac3-d7042b2a8d26")
+                            UserId = new Guid("8c959f21-b912-4bcc-b0aa-bc348acff676"),
+                            RoleId = new Guid("ecd4248c-c3be-4059-84e7-5e3b313bca47")
                         });
                 });
 

@@ -37,12 +37,12 @@ namespace LocalChat.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatRooms");
+                    b.ToTable("ChatRooms", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ab06520d-f5ce-488d-92e0-0a115836e908"),
+                            Id = new Guid("b111d878-817b-40fa-b22c-f36be15f084c"),
                             Name = "General"
                         });
                 });
@@ -65,7 +65,7 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("ChatRoomUsers");
+                    b.ToTable("ChatRoomUsers", (string)null);
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.Comment", b =>
@@ -93,7 +93,7 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.CommentReaction", b =>
@@ -117,7 +117,7 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CommentReactions");
+                    b.ToTable("CommentReactions", (string)null);
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.Message", b =>
@@ -148,7 +148,7 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.Post", b =>
@@ -163,7 +163,7 @@ namespace LocalChat.Core.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Likes")
+                    b.Property<int?>("Likes")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("SenderId")
@@ -181,7 +181,7 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.PostReaction", b =>
@@ -205,7 +205,7 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PostReactions");
+                    b.ToTable("PostReactions", (string)null);
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.User", b =>
@@ -279,35 +279,35 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("31282b42-051e-4afe-8df8-fe0ce4e45042"),
+                            Id = new Guid("65913f9e-a072-46f6-a3be-621f1cdeede0"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "81b0f8ed-da73-49d8-88f2-d0fd55aff5a2",
+                            ConcurrencyStamp = "ef433189-a85a-4b6d-ab03-435ef4a4bf40",
                             Email = "admin@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Admin User",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALCHAT.EXAMPLE",
                             NormalizedUserName = "ADMIN@LOCALCHAT.EXAMPLE",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAeAt9+i5krx8GFBuIIeICK+Y6YfC4ILNwqCOEHzDaHutkRfr/LphW6oMd0pghmt7g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIcdOse1VYQAUHTDFqGbGEyePYtxdQNuCMU/25OUsayM//+Ulvekn251YDa+92U0pQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a276fdf6-6012-4609-a44c-7e6f581d00c9",
+                            SecurityStamp = "ae2ce967-374e-4843-981d-3a2a39f5e87f",
                             TwoFactorEnabled = false,
                             UserName = "admin@localchat.example"
                         },
                         new
                         {
-                            Id = new Guid("e3193d2c-cd15-489e-8ece-5d5d38b480f2"),
+                            Id = new Guid("8c959f21-b912-4bcc-b0aa-bc348acff676"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e0637579-ebf3-4b55-9f9d-3c7d70985447",
+                            ConcurrencyStamp = "555af223-978a-4c25-8473-f8181d6a6fe8",
                             Email = "user@localchat.example",
                             EmailConfirmed = true,
                             FullName = "Regular User",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALCHAT.EXAMPLE",
                             NormalizedUserName = "USER@LOCALCHAT.EXAMPLE",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOsLnvQ/GsC2lnwV/xjvsxaEdH6OuoeqHEDJ43oBNkpehdrHsa1BqxqCD/xSArx6lA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELG4rWYu7saeIY9S+bKd/D46uH1aqehZQjhY0+L/gY53S3QEfVmVIVYd3RExTTOhaw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f0a0b0d4-7193-4d95-8fbb-b3f1a63d6a94",
+                            SecurityStamp = "19f40ac0-f591-4f2f-b432-150f84ffeaaa",
                             TwoFactorEnabled = false,
                             UserName = "user@localchat.example"
                         });
@@ -343,15 +343,15 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b1ce8dda-6c2d-49d1-8ad2-e5226fd6f9a5"),
-                            ConcurrencyStamp = "b1ce8dda-6c2d-49d1-8ad2-e5226fd6f9a5",
+                            Id = new Guid("19395eca-c032-430b-baa2-14efcb52aefb"),
+                            ConcurrencyStamp = "19395eca-c032-430b-baa2-14efcb52aefb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("2cba64d6-fd11-41d3-9c03-c370abcff9d1"),
-                            ConcurrencyStamp = "2cba64d6-fd11-41d3-9c03-c370abcff9d1",
+                            Id = new Guid("ecd4248c-c3be-4059-84e7-5e3b313bca47"),
+                            ConcurrencyStamp = "ecd4248c-c3be-4059-84e7-5e3b313bca47",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -445,13 +445,13 @@ namespace LocalChat.Core.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("31282b42-051e-4afe-8df8-fe0ce4e45042"),
-                            RoleId = new Guid("b1ce8dda-6c2d-49d1-8ad2-e5226fd6f9a5")
+                            UserId = new Guid("65913f9e-a072-46f6-a3be-621f1cdeede0"),
+                            RoleId = new Guid("19395eca-c032-430b-baa2-14efcb52aefb")
                         },
                         new
                         {
-                            UserId = new Guid("e3193d2c-cd15-489e-8ece-5d5d38b480f2"),
-                            RoleId = new Guid("2cba64d6-fd11-41d3-9c03-c370abcff9d1")
+                            UserId = new Guid("8c959f21-b912-4bcc-b0aa-bc348acff676"),
+                            RoleId = new Guid("ecd4248c-c3be-4059-84e7-5e3b313bca47")
                         });
                 });
 

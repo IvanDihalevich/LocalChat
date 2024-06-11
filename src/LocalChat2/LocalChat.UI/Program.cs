@@ -15,7 +15,6 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
 builder.Services.AddDefaultIdentity<User>(
 options => {
     options.SignIn.RequireConfirmedAccount = false;
@@ -29,6 +28,7 @@ options => {
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRepositories();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -55,5 +55,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub");
+});
 app.Run();

@@ -20,10 +20,10 @@ namespace LocalChat.Core.Entities
         public Post? Post { get; set; }
 		[ForeignKey(nameof(Post))]
 		public Guid? PostId { get; set; }
-		public virtual ICollection<CommentReaction> CommentReactions{ get; set; }
+		public virtual ICollection<CommentReaction> CommentReactions{ get; set; } = new List<CommentReaction>();
 		[NotMapped]
-		public int Likes { get; set; }
+		public int? Likes { get; set; }
 		[NotMapped]
-		public int Dislikes { get; set; }
+		public int? Dislikes { get; set; }
 	}
 }
