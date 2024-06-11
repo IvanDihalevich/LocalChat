@@ -23,11 +23,14 @@ namespace LocalChat.Repository.Services
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public void DeleteComment(Guid id)
+		public async void DeleteComment(Guid id)
 		{
 			var commentToDelete = _dbContext.Comments.FirstOrDefault(m => m.Id == id);
 			if (commentToDelete != null)
 			{
+				var commentsReaction = _dbContext.CommentReactions.Where(m => m.CommentId == commentToDelete.Id);
+
+				_dbContext.CommentReactions.RemoveRange(commentsReaction);
 				_dbContext.Comments.Remove(commentToDelete);
 				_dbContext.SaveChanges();
 			}

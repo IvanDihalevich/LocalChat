@@ -29,7 +29,7 @@ namespace LocalChat.Repository.Services
             await _dbContext.CommentReactions.AddAsync(reaction);
             await _dbContext.SaveChangesAsync();
         }
-
+     
         public async Task UpdateReactionAsync(CommentReaction reaction)
         {
             _dbContext.CommentReactions.Update(reaction);

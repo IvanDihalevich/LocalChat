@@ -1,30 +1,111 @@
 ﻿@using LocalChat.Core.Entities
 @inject LocalChat.Repository.Services.IUserService UserService
 @model IEnumerable<Post>
-<a href="/Posts/Create" class="btn btn-primary">Create post<a/>
-	<table>
-		<thead>
-			<th>Title</th>
-			<th>Photo</th>
-			<th>Text</th>
-			<th>Likes</th>
-			<th>User</th>
-			<th>Date when was posted</th>
-			<th>Discussion</th>
 
-		</thead>
-		<tbody>
-			@foreach(var post in Model)
-			{
-				<tr>
-					<td>@post.Title</td>
-					<td><img class="card-img-top p-1" src="@post.ImagePath" alt="Фото поста"/></td>
-					<td>@post.Text</td>
-					<td>@post.Likes</td>
-					<td>@UserService.GetUserNameById(post.SenderId)</td>
-					<td>@post.CreateDateTime</td>
-					<td><a href="/Posts/Discussion/@post.Id">View discussion</a></td>
-				</tr>
-		    }
-		</tbody>
-	</table>
+<style>
+    .post-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-gap: 20px;
+        justify-items: center;
+    }
+
+    .post-card {
+        width: 300px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .post-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .post-card .post-details {
+            padding: 20px;
+        }
+
+        .post-card .post-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .post-card .post-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .post-card .post-meta {
+            font-size: 14px;
+            color: #999;
+        }
+
+            .post-card .post-meta a {
+                color: #333;
+                text-decoration: none;
+                transition: color 0.3s ease-in-out;
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .post-card .post-meta a:hover {
+                    background-color: #45a049;
+                }
+
+    .btn-create-post {
+        text-align: center;
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+        .btn-create-post:hover {
+            background-color: #45a049;
+        }
+</style>
+
+<a href="/Posts/Create" class="btn-create-post">Create Post</a>
+
+<div class="post-container">
+    @foreach (var post in Model)
+    {
+        <div class="post-card">
+            <img src="@post.ImagePath" alt="Post Image">
+            <div class="post-details">
+                <div class="post-title">@post.Title</div>
+                <div class="post-text">@post.Text</div>
+                <div class="post-meta">
+                    <span>Likes: @post.Likes</span><br>
+                    <span>User: @UserService.GetUserNameById(post.SenderId)</span><br>
+                    <span>Date: @post.CreateDateTime.ToString("yyyy-MM-dd")</span><br>
+                    <a href="/Posts/Discussion/@post.Id">View Discussion</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
