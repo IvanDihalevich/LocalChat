@@ -36,7 +36,7 @@ namespace LocalChat.UI.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var posts = await _postService.GetAllPostsById();
+            var posts = (await _postService.GetAllPostsById()).OrderByDescending    (p => p.CreateDateTime);
             return View(posts);
         }
         [HttpPost]

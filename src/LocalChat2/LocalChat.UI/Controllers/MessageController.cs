@@ -62,5 +62,14 @@ namespace LocalChat.UI.Controllers
 
             return RedirectToAction("Index", new { id = model.ChatRoomId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessages(Guid chatRoomId)
+        {
+            var messages = await _messageService.GetAllByChatRoomId(chatRoomId);
+            messages = messages.OrderBy(m => m.SendTime).ToList(); // Сортировка по времени отправки
+
+            return PartialView("_Messages", messages); // Убедитесь, что у вас есть частичное представление _Messages
+        }
     }
 }

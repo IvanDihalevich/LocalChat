@@ -94,8 +94,30 @@ else
     </form>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
-    // Автоматична прокрутка до останнього повідомлення при завантаженні сторінки
+    // Автоматическая прокрутка до последнего сообщения при загрузке страницы
     var messageContainer = document.getElementById("message-container");
     messageContainer.scrollTop = messageContainer.scrollHeight;
+
+    function reload() {
+        $.ajax({
+            url: '@Url.Action("GetMessages", "Message", new { chatRoomId = ViewData["ChatRoomId"] })', // Убедитесь, что этот URL правильный
+            type: 'GET',
+            success: function (data) {
+                // Обновляем контейнер сообщений
+                $('#message-container').html(data);
+
+                // Прокручиваем до последнего сообщения
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            },
+            error: function (xhr, status, error) {
+                console.error('Ошибка при загрузке сообщений:', error);
+            }
+        });
+    }
+
+    // Запускаем функцию reload каждые 3 секунды
+    setInterval(reload, 1000);
 </script>
