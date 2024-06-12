@@ -1,29 +1,115 @@
-﻿﻿@using LocalChat.Repository.Model
+﻿@using LocalChat.Repository.Model
 
 @model IEnumerable<UserListItemModel>
 
-<h1>Друзі</h1>
+@{
+    ViewData["Title"] = "People";
+}
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Message</th>
+<style>
+    body {
+        background-color: #fff8e1; /* Светло-желтый фон страницы */
+        font-family: 'Arial', sans-serif;
+    }
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var u in Model)
-        {
-            <tr>
-                <td>@u.FullName</td>
-                <td>
-                    <a href="/user/text/@u.Id" class="btn btn-warning">Message</a>
-                </td>
-            </tr>
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #f9a825; /* Темно-желтый цвет для заголовка */
+    }
+
+    .table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fffde7; /* Светло-желтый фон таблицы */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
         }
-    </tbody>
-</table>
 
+        .table thead {
+            background-color: #f9a825; /* Темно-желтый фон заголовка таблицы */
+            color: #fff;
+        }
 
+            .table thead th:nth-child(2) {
+                text-align: center; /* Выравнивание заголовка "Message" по центру */
+            }
 
+        .table tbody tr td:nth-child(2) {
+            text-align: center; /* Выравнивание кнопок по центру */
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #fff9c4; /* Светло-желтый фон для четных строк */
+        }
+
+        .table tr:hover {
+            background-color: #fff59d; /* Темно-светло-желтый фон для строк при наведении */
+        }
+
+    .btn-warning {
+        background-color: #f9a825; /* Темно-желтый цвет кнопки */
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #f57f17; /* Более темный желтый цвет при наведении */
+        }
+
+    .glow-on-hover {
+        position: relative;
+        width: fit-content;
+    }
+
+        .glow-on-hover:hover {
+            background: #f57f17; /* Темно-желтый цвет при наведении */
+            box-shadow: 0 0 10px #f9a825, 0 0 20px #f9a825, 0 0 30px #f9a825;
+            transition: 0.3s;
+        }
+
+    .vidstan {
+        margin: 0 auto;
+        display: block;
+    }
+</style>
+
+<h1>People</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p style="text-align: center;">No users found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <td>@u.FullName</td>
+                    <td>
+                        <a href="/user/text/@u.Id" class="btn btn-warning glow-on-hover vidstan">Message</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

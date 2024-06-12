@@ -1,34 +1,119 @@
 ﻿@model IEnumerable<LocalChat.Core.Entities.ChatRoom>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Rooms</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3e5f5; /* Светло-фиолетовый фон страницы */
+            color: #4a148c; /* Темно-фиолетовый цвет текста */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
 
-@if (Model == null && !Model.Any())
-{
-    <p>No messages found.</p>
-}
-else
-{
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Sender</th>
-                <th>Text</th>
-                <th>Send Time</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Messages</td>
-                    <td>
-                        <a href="/chatroomadmin/delete/@item.Id" class="btn btn-danger">Видалити</a>
-                    </td>
-                </tr>
+        .table {
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+            .table th, .table td {
+                border: none;
+                padding: 12px 20px;
+                vertical-align: middle;
             }
-        </tbody>
-        <a href="/chatroomadmin/create" class="btn btn-success float-end" type="button">Create</a>
-    </table>
-}
+
+            .table th {
+                background-color: #e1bee7; /* Светло-фиолетовый цвет заголовков таблицы */
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .table tbody tr:nth-child(odd) {
+                background-color: #ede7f6; /* Светло-фиолетовый цвет для нечетных строк */
+            }
+
+            .table tbody tr:hover {
+                background-color: #d1c4e9; /* Цвет при наведении на строки */
+            }
+
+        .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 0.25rem;
+        }
+
+        .btn-success {
+            background-color: #7b1fa2; /* Темно-фиолетовый цвет кнопки */
+            border-color: #7b1fa2;
+            width: 100%;
+            text-align: center;
+        }
+
+            .btn-success:hover {
+                background-color: #4a148c; /* Более темный фиолетовый цвет при наведении */
+                border-color: #4a148c;
+            }
+
+        .btn-danger {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
+        }
+
+        .float-end {
+            float: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4 text-center">Chat Rooms</h1>
+
+        <a href="/chatroomadmin/create" class="btn btn-success mb-4" type="button">Create New Chat Room</a>
+
+        @if (Model == null || !Model.Any())
+        {
+            <p>No chat rooms found.</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Room Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>
+                                <a href="/chatroomadmin/delete/@item.Id" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

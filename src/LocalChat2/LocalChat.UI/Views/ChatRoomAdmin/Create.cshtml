@@ -1,31 +1,70 @@
-﻿﻿@using LocalChat.Core.Entities
+﻿@using LocalChat.Core.Entities
 @model ChatRoom
 
-@{
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новий проєкт</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<h1>Новий проєкт</h1>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
 
+        .form-control {
+            margin-bottom: 15px;
+        }
 
-<form asp-action="Create" enctype="multipart/form-data">
+        .text-danger {
+            font-size: 0.875rem;
+        }
 
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
+        .btn-success {
+            background-color: mediumpurple;
+            border-color: mediumpurple;
+            width: 100%;
+            text-align: center;
+        }
 
-    <div class="row">
-        <div data="mb-3">
-            @Html.DisplayNameFor(model => model.Name)
-            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-            <span asp-validation-for="Name" class="text-danger" />
-        </div>
+            .btn-success:hover {
+                background-color: rebeccapurple;
+                border-color: rebeccapurple;
+            }
+    </style>
+</head>
+<body>
+    <div class="a">
+        <h1 class="text-center mb-4">Нова група</h1>
+
+        <form asp-action="Create" enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name)
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <button class="btn btn-primary btn-success" type="submit">Зберегти</button>
+        </form>
     </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <button class="btn btn-primary btn-block" style="width: 100% !important" type="submit">Зберегти</button>
-        </div>
-    </div>
-</form>
-@*
 
-
-*@
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

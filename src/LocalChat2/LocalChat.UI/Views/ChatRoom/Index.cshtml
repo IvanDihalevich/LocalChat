@@ -1,8 +1,93 @@
 ﻿@model IEnumerable<LocalChat.Core.Entities.ChatRoom>
 
-@if (Model == null && !Model.Any())
+@{
+    ViewData["Title"] = "Список Чатів";
+}
+
+<style>
+    body {
+        background-color: #f5e6f7; /* Светло-светло-фиолетовый фон страницы */
+        font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #7b1fa2; /* Светло-темно-фиолетовый цвет для заголовка */
+    }
+
+    .table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #f0e0fc; /* Светло-светло-фиолетовый фон таблицы */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table thead {
+            background-color: #7b1fa2; /* Светло-темно-фиолетовый фон заголовка таблицы */
+            color: #fff;
+        }
+
+            .table thead th:nth-child(2) {
+                text-align: center; /* Выравнивание заголовка "Join" по центру */
+            }
+
+        .table tbody tr td:nth-child(2) {
+            text-align: center; /* Выравнивание кнопок по центру */
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #e1ccee; /* Светло-светло-фиолетовый фон для четных строк */
+        }
+
+        .table tr:hover {
+            background-color: #ceb5e3; /* Темно-светло-фиолетовый фон для строк при наведении */
+        }
+
+    .btn-primary {
+        background-color: #7b1fa2; /* Светло-темно-фиолетовый цвет кнопки */
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #5d1686; /* Темный фиолетовый цвет при наведении */
+        }
+
+    .glow-on-hover {
+        position: relative;
+        width: fit-content;
+    }
+
+        .glow-on-hover:hover {
+            background: #5d1686; /* Темный фиолетовый цвет при наведении */
+            box-shadow: 0 0 10px #7b1fa2, 0 0 20px #7b1fa2, 0 0 30px #7b1fa2;
+            transition: 0.3s;
+        }
+
+    .vidstan {
+        margin: 0 auto;
+        display: block;
+    }
+</style>
+
+<h1>Список Чатів</h1>
+
+@if (Model == null || !Model.Any())
 {
-    <p>No messages found.</p>
+    <p style="text-align: center; color: #7b1fa2;">No chat rooms found.</p>
 }
 else
 {
@@ -17,9 +102,8 @@ else
             @foreach (var chatRoom in Model)
             {
                 <tr>
-                    <td>@chatRoom.Name</td>
+                    <td style="color: #4a148c;">@chatRoom.Name</td> <!-- Чуть более темный фиолетовый для текста -->
                     <td>
-
                         <a href="@Url.Action("Index", "Message", new { id = chatRoom.Id })" class="btn btn-primary glow-on-hover vidstan">Вступити в чат</a>
                     </td>
                 </tr>
