@@ -13,9 +13,13 @@ namespace LocalChat.Repository.Services
         Message GetMessageById(Guid messageId);
         List<Message> GetMessagesBySenderId(Guid senderId);
         List<Message> GetMessagesBySendTime(DateTime sendTime);
+
+        List<Message> GetAllMessagesByReciverId(Guid reciverId);
         void UpdateMessage(Message message);
         bool MessageExists(Guid id);
+        Task AddMessageAsync(Message message);
         void DeleteMessage(Guid id);
-        IQueryable<Message> GetAllMessages();
+        Task<IEnumerable<Message>> GetAll();
+        Task<IEnumerable<Message>> GetAllByChatRoomId(Guid id);
     }
 }

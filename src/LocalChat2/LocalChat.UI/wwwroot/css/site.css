@@ -20,3 +20,45 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.telegram-chat {
+    display: flex;
+    flex-direction: column-reverse; /* Reverse order to display latest messages at the bottom */
+}
+
+.message-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.message-content {
+    background-color: #DCF8C6; /* Message bubble background color */
+    border-radius: 15px;
+    padding: 10px;
+    max-width: 70%; /* Adjust according to your design */
+}
+
+.message-sender {
+    font-weight: bold;
+    text-align: right;
+}
+
+.message-text {
+    margin-top: 5px;
+}
+
+.message-meta {
+    display: flex;
+    align-items: flex-end;
+    margin-left: 10px;
+}
+
+.message-time {
+    font-size: 0.8em;
+    color: #888; /* Time color */
+}
+
+.unknown-sender,
+.unknown-time {
+    color: #888; /* Color for unknown sender and time */
+}

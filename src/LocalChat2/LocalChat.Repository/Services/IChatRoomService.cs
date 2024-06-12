@@ -8,7 +8,7 @@ namespace LocalChat.Repository.Services
     {
         void CreateChatRoom(ChatRoom chatRoom);
         ChatRoom GetChatRoomById(Guid chatRoomId);
-        List<ChatRoom> GetAllChatRooms();
+        IEnumerable<ChatRoom> GetAllChatRooms();
         void UpdateChatRoom(ChatRoom updatedChatRoom);
         void DeleteChatRoom(Guid chatRoomId);
         bool ChatRoomExists(Guid id);

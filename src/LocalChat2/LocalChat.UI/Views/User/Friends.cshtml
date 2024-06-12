@@ -1,0 +1,29 @@
+﻿﻿@using LocalChat.Repository.Model
+
+@model IEnumerable<UserListItemModel>
+
+<h1>Друзі</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Message</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.FullName</td>
+                <td>
+                    <a href="/user/text/@u.Id" class="btn btn-warning">Message</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

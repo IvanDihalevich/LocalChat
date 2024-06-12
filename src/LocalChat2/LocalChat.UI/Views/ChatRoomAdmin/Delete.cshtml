@@ -1,0 +1,16 @@
+﻿﻿@using LocalChat.Core.Entities
+@model ChatRoom
+
+@{
+    var types = ViewBag.ChatRoom as List<SelectListItem>;
+}
+
+<h1>Видалення проєкту: @Model.Name</h1>
+
+
+<form asp-action="Delete">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <button class="btn btn-primary" type="submit">Видалити</button>
+</form>

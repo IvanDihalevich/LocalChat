@@ -1,0 +1,157 @@
+﻿@model DiscussionViewModel
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+    .post {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+        .post img {
+            max-width: 50%; /* Изменено на 50% от ширины контейнера */
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .post .like-btn {
+            border: none;
+            background: #2ecc71; /* Зеленый цвет */
+            color: #fff; /* Белый цвет текста */
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .post .dislike-btn {
+            border: none;
+            background: #333; /* Черный цвет */
+            color: #fff; /* Белый цвет текста */
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    .comments {
+        border-top: 1px solid #ccc;
+        padding-top: 20px;
+        margin-top: 20px;
+    }
+
+    .comment {
+        border: 1px solid #eee;
+        border-radius: 5px;
+        padding: 10px;
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+        .comment .reaction-btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+            .comment .like-btn:hover {
+                color: green; /* Зеленый цвет при наведении */
+            }
+
+            .comment .dislike-btn:hover {
+                color: red; /* Зеленый цвет при наведении */
+            }
+
+    .add-comment {
+        margin-top: 20px;
+    }
+
+</style>
+
+<div class="post">
+    <h2>@Model.Post.Title</h2>
+    <p>@Model.Post.Text</p>
+    <p><strong>By:</strong> @Model.Post.Sender?.FullName on @Model.Post.CreateDateTime</p>
+    <img src="@Model.Post.ImagePath" alt="Post Image" />
+    <div class="d-flex" style="gap: 15px;">
+        <p><strong>Likes:</strong> @Model.Post.Likes</p>
+        <p><strong>Dislikes:</strong> @Model.Post.Dislikes</p>
+    </div>
+    <div>
+        <form asp-action="LikePost" asp-controller="Posts" method="post" style="display: inline;">
+            <input type="hidden" name="postId" value="@Model.Post.Id" />
+            <button type="submit" class="like-btn">
+                <i class="fas fa-thumbs-up"></i> Like
+            </button>
+        </form>
+        <form asp-action="DislikePost" asp-controller="Posts" method="post" style="display: inline;">
+            <input type="hidden" name="postId" value="@Model.Post.Id" />
+            <button type="submit" class="dislike-btn">
+                <i class="fas fa-thumbs-down"></i> Dislike
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="comments">
+    <h3>Comments</h3>
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        <div class="d-flex flex-column mx-3 my-5" style="gap: 15px">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="comment">
+                    <p>@comment.Content</p>
+                    <p><strong>By:</strong> @comment.Sender?.FullName on @comment.CreationTime</p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <form asp-action="DeleteComment" asp-controller="Posts" method="post" style="position: absolute; right: 0; top: 0;">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <input type="hidden" name="postId" value="@Model.Post.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    }
+                    <div class="d-flex" style="gap: 25px;">
+                        <form asp-action="LikeComment" asp-controller="Posts" method="post" style="display: inline;">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <input type="hidden" name="postId" value="@Model.Post.Id" />
+                            <button type="submit" class="like-btn">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span>@comment.CommentReactions.Where(r => r.Reaction == 1).Count()</span>
+                        </form>
+                        <form asp-action="DislikeComment" asp-controller="Posts" method="post" style="display: inline;">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <input type="hidden" name="postId" value="@Model.Post.Id" />
+                            <button type="submit" class="dislike-btn">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span>@comment.CommentReactions.Where(r => r.Reaction == -1).Count()</span>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No comments yet.</p>
+    }
+</div>
+
+<div class="add-comment">
+    <h3>Leave a Comment</h3>
+    <form asp-action="AddComment" asp-controller="Posts" method="post">
+        <input type="hidden" asp-for="NewComment.PostId" />
+        <div class="form-group">
+            <textarea asp-for="NewComment.Content" class="form-control" rows="4" placeholder="Write your comment here..."></textarea>
+            <span asp-validation-for="NewComment.Content" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

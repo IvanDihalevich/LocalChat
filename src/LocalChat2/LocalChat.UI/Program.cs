@@ -3,8 +3,9 @@ using LocalChat.Core.Entities;
 using LocalChat.Core.Context;
 using Microsoft.AspNetCore.Identity;
 using LocalChat.Repository.DependencyInjection;
+using LocalChat.Repository.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -13,7 +14,6 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 
 builder.Services.AddDefaultIdentity<User>(
 options => {
@@ -28,6 +28,7 @@ options => {
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRepositories();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -54,5 +55,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub");
+});
 app.Run();

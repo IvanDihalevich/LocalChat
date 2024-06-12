@@ -1,0 +1,20 @@
+﻿@using System.Security.Claims
+@model IEnumerable<LocalChat.Core.Entities.Message>
+
+@foreach (var message in Model)
+{
+    var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+    var isSentByCurrentUser = message.SenderId == currentUserId;
+    var senderName = isSentByCurrentUser ? User.Identity.Name : message.Sender.Email;
+    <div class="message @(isSentByCurrentUser ? "sent-by-user" : "")">
+        <div class="message-sender">
+            <span>@senderName</span>
+        </div>
+        <div class="message-text">
+            @message.Text
+        </div>
+        <div>
+            <span>@message.SendTime </span>
+        </div>
+    </div>
+}

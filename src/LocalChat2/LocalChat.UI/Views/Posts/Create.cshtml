@@ -1,0 +1,89 @@
+﻿@using LocalChat.Core.Entities
+@using System.Security.Claims
+@model Post
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-control {
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        margin-bottom: 20px;
+    }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .input-group-text {
+        background-color: #45a049;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-submit {
+        padding: 12px 20px;
+        font-size: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #45a049;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+        .btn-submit:hover {
+            background-color: #45a049;
+        }
+</style>
+
+<form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" method="post" class="form-container">
+    <input asp-for="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" hidden />
+
+    <div class="form-title">Create Post</div>
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input asp-for="Title" type="text" class="form-control" id="title" placeholder="Enter the title" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="photo" class="form-label">Photo</label>
+        <div class="input-group">
+            <input asp-for="Photo" type="file" accept="image/*" class="form-control" id="photo" required />
+            <label class="input-group-text bg-success" for="photo">Choose Photo</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="desc" class="form-label">Description</label>
+        <textarea asp-for="Text" class="form-control" id="desc" rows="5" placeholder="Enter the description" required></textarea>
+    </div>
+
+    <input asp-for="Likes" value="0" hidden />
+
+    <button class="btn btn-submit" type="submit">Post</button>
+</form>

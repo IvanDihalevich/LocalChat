@@ -1,109 +1,75 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using LocalChat.Core.Context;
+using LocalChat.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using LocalChat.Core.Entities;
-using LocalChat.Repository;
+using Microsoft.EntityFrameworkCore;
 using LocalChat.Repository.Services;
+using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
-namespace LocalChat.WebUI.Controllers
+
+namespace LocalChat.UI.Controllers
 {
+    [Authorize]  
     public class MessageController : Controller
     {
+        private readonly ChatDbContext _dbContext;
+        private readonly UserManager<User> _userManager;
         private readonly IMessageService _messageService;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public MessageController(IMessageService messageService)
+        public MessageController(ChatDbContext dbContext, UserManager<User> userManager, IMessageService messageService, IHubContext<ChatHub> hubContext)
         {
+            _dbContext = dbContext;
+            _userManager = userManager;
             _messageService = messageService;
+            _hubContext = hubContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(Guid id)
         {
-            var messages = _messageService.GetAllMessages();
+            ViewData["ChatRoomId"] = id;
+            var messages = await _messageService.GetAllByChatRoomId(id);
+            messages = messages.OrderBy(m => m.SendTime); // Сортування за часом спаданням
             return View(messages);
         }
 
-        public IActionResult Details(Guid id)
+        [HttpGet]
+        public IActionResult Create(Guid id)
         {
-            var message = _messageService.GetMessageById(id);
-            return View(message);
+            ViewData["ChatRoomId"] = id;
+            return View(new Message() { ChatRoomId = id });
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Message message)
+        public async Task<IActionResult> Create(Message model)
         {
             if (ModelState.IsValid)
             {
-                _messageService.SendMessage(message);
-                return RedirectToAction(nameof(Index));
+                await _messageService.AddMessageAsync(model); // Виклик методу AddMessageAsync вашого сервісу
+
+                // Send the message to the SignalR hub
+                await _hubContext.Clients.Group(model.ChatRoomId.ToString())
+                    .SendAsync("ReceiveMessage", model.SenderId, model.Text, model.ChatRoomId);
+
+                return RedirectToAction("Index", new { id = model.ChatRoomId });
             }
-            return View(message);
+
+            return RedirectToAction("Index", new { id = model.ChatRoomId });
         }
 
-        public IActionResult Edit(Guid id)
+        [HttpGet]
+        public async Task<IActionResult> GetMessages(Guid chatRoomId)
         {
-            var message = _messageService.GetMessageById(id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-            return View(message);
-        }
+            var messages = await _messageService.GetAllByChatRoomId(chatRoomId);
+            messages = messages.OrderBy(m => m.SendTime).ToList(); // Сортировка по времени отправки
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, Message message)
-        {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _messageService.UpdateMessage(message);
-                }
-                catch (Exception)
-                {
-                    if (!_messageService.MessageExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(message);
-        }
-
-        public IActionResult Delete(Guid id)
-        {
-            var message = _messageService.GetMessageById(id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            return View(message);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
-        {
-            _messageService.DeleteMessage(id);
-            return RedirectToAction(nameof(Index));
+            return PartialView("_Messages", messages); // Убедитесь, что у вас есть частичное представление _Messages
         }
     }
 }

@@ -1,86 +1,96 @@
-﻿using LocalChat.Core.Context;
-using LocalChat.Core.Entities;
-using LocalChat.Repository.Services;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LocalChat.Core.Context;
+using LocalChat.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LocalChat.Repository.Services
 {
     public class MessageService : IMessageService
     {
-        private List<Message> _messages;
         private readonly ChatDbContext _dbContext;
-
-        //public MessageService()
-        //{
-        //    _messages = new List<Message>();
-        //}
 
         public MessageService(ChatDbContext dbContext)
         {
             _dbContext = dbContext;
-            _messages = new List<Message>();
         }
 
+    
+        public async Task AddMessageAsync(Message message)
+        {
+            var lastmassage = await _dbContext.Messages.OrderByDescending(p => p.Id).FirstOrDefaultAsync();
 
+            if (lastmassage != null)
+            {
+
+                message.Id = Guid.NewGuid();
+            }
+            else
+            {
+                message.Id = Guid.NewGuid();
+            }
+
+            await _dbContext.Messages.AddAsync(message);
+            await _dbContext.SaveChangesAsync();
+        }
         public void SendMessage(Message message)
         {
-            // Додаємо повідомлення до колекції
-            _messages.Add(message);
+            _dbContext.Messages.Add(message);
+            _dbContext.SaveChanges();
         }
 
         public Message GetMessageById(Guid messageId)
         {
-            // Пошук повідомлення за його ідентифікатором
-            return _messages.Find(m => m.Id == messageId);
+            return _dbContext.Messages.FirstOrDefault(m => m.Id == messageId);
+        }
+
+        public async Task<IEnumerable<Message>> GetAllByChatRoomId(Guid id)
+        {
+            return await _dbContext.Messages.Include(m => m.Sender)
+               .Where(m => m.ChatRoomId == id)
+               .ToListAsync();
         }
 
         public List<Message> GetMessagesBySenderId(Guid senderId)
         {
-            // Пошук повідомлень від заданого відправника
-            return _messages.FindAll(m => m.SenderId.Id == senderId);
+            return _dbContext.Messages.Where(m => m.SenderId == senderId).ToList();
         }
-
+        public List<Message> GetAllMessagesByReciverId(Guid reciverId)
+        {
+            return _dbContext.Messages.Where(x=>x.ReciverId == reciverId).ToList();
+        }
 
         public List<Message> GetMessagesBySendTime(DateTime sendTime)
         {
-            // Пошук повідомлень за часом надсилання
-            return _messages.FindAll(m => m.SendTime == sendTime);
+            return _dbContext.Messages.Where(m => m.SendTime == sendTime).ToList();
         }
 
-        public IQueryable<Message> GetAllMessages()
+        public async Task<IEnumerable<Message>> GetAll()
         {
-            return _dbContext.Messages;
+            return await _dbContext.Messages.ToListAsync();
         }
 
         public void UpdateMessage(Message message)
         {
-
             var existingMessage = _dbContext.Messages.FirstOrDefault(m => m.Id == message.Id);
             if (existingMessage != null)
             {
                 existingMessage.Text = message.Text;
                 existingMessage.SendTime = message.SendTime;
-
-
                 _dbContext.SaveChanges();
             }
         }
 
-
         public bool MessageExists(Guid id)
         {
-            // Реалізація перевірки існування повідомлення за ідентифікатором
             return _dbContext.Messages.Any(m => m.Id == id);
         }
 
         public void DeleteMessage(Guid id)
         {
-            // Реалізація видалення повідомлення з бази даних
             var messageToDelete = _dbContext.Messages.FirstOrDefault(m => m.Id == id);
             if (messageToDelete != null)
             {
@@ -88,5 +98,6 @@ namespace LocalChat.Repository.Services
                 _dbContext.SaveChanges();
             }
         }
+
     }
 }

@@ -13,6 +13,9 @@ namespace LocalChat.Repository.Services
         void UpdateUser(User updatedUser);
         void DeleteUser(Guid userId);
         User GetUserById(Guid userId);
+        User GetUserByEmail(string userEmail);
+        string GetUserNameById(Guid? userId);
+
         List<User> GetAllUsers();
         bool UserExists(Guid id);
     }

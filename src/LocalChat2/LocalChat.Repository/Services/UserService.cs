@@ -44,6 +44,12 @@ namespace LocalChat.Repository.Services
             // Знайти користувача за його ідентифікатором
             return _dbContext.Users.Find(userId);
         }
+        public string GetUserNameById(Guid? userId)
+        {
+            var usr = _dbContext.Users.Find(userId);
+            // Знайти користувача за його ідентифікатором
+            return usr.FullName;
+        }
 
         public List<User> GetAllUsers()
         {
@@ -55,5 +61,10 @@ namespace LocalChat.Repository.Services
             // Реалізація перевірки існування користувача за ідентифікатором
             return _dbContext.Users.Any(u => u.Id == id);
         }
-    }
+
+		public User GetUserByEmail(string userEmail)
+		{
+            return _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+		}
+	}
 }

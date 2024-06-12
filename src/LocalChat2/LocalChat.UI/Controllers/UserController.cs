@@ -5,100 +5,114 @@ using System.Threading.Tasks;
 using LocalChat.Core.Entities;
 using LocalChat.Repository;
 using LocalChat.Repository.Services;
+using Microsoft.AspNetCore.Authorization;
+using LocalChat.Repository.UserRepositories;
+using Microsoft.AspNetCore.Identity;
+using LocalChat.UI.Areas.Identity.Pages.Account;
+using LocalChat.Repository.Model;
+
 
 namespace LocalChat.WebUI.Controllers
 {
-    public class UserController : Controller
-    {
-        private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
+        public class UserController : Controller
         {
-            _userService = userService;
+            private readonly IUserRepository userRepository;
+            private readonly IMessageService messageRepository;
+
+        public UserController(IUserRepository userRepository, IMessageService _messageRepository)
+            {
+                this.userRepository = userRepository;
+            this.messageRepository = _messageRepository;
+            }
+
+            [Authorize(Roles = "Admin")]
+            public async Task<IActionResult> Index()
+            {
+                return View(await userRepository.GetAllWithRolesAsync());
+            }
+        [HttpGet]
+        public async Task<IActionResult> Friends()
+        {
+            return View(await userRepository.GetAllWithRolesAsync());
         }
 
-        public IActionResult Index()
+        [Authorize(Roles = "Admin")]
+            [HttpGet]
+            public IActionResult Create()
+            {
+                return View(new UserCreateModel());
+            }
+
+            [Authorize(Roles = "Admin")]
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create(UserCreateModel model)
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await userRepository.CreateWithPasswordAsync(model);
+
+                    if (user != null)
+                    {
+                        return RedirectToAction(nameof(Edit), new { id = user.Id });
+                    }
+                }
+
+                return View(new UserCreateModel());
+            }
+
+            [HttpGet]
+            public async Task<IActionResult> Edit(Guid id)
+            {
+                ViewBag.Roles = await userRepository.GetRolesAsync();
+                return View(await userRepository.GetOneWithRolesAsync(id));
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(UserListItemModel model, string[] roles)
+            {
+                if (ModelState.IsValid)
+                {
+                    await userRepository.UpdateUserAsync(model, roles);
+                    return RedirectToAction("Index");
+                }
+                ViewBag.Roles = await userRepository.GetRolesAsync();
+                return View(model);
+            }
+        [HttpGet]
+        public async Task<IActionResult> Text(Guid id)
         {
+            ViewData["ReciverId"] = id;
+            ViewBag.Messages = messageRepository.GetAllMessagesByReciverId(id);
             return View();
         }
 
-        public IActionResult Details(Guid id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Text(Message message, Guid id)
         {
-            var user = _userService.GetUserById(id);
-            return View(user);
+            ViewData["SenderId"] = id;
+            if (ModelState.IsValid)
+            {
+                await messageRepository.AddMessageAsync(message);
+                return RedirectToAction("Text");
+            }
+            ViewBag.Messages = messageRepository.GetAllMessagesByReciverId(id);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Create(User user)
-        {
-            if (ModelState.IsValid)
+            public async Task<int> CheckDelete(Guid id)
             {
-                _userService.AddUser(user);
-                Console.WriteLine("Created user");
-                return RedirectToAction(nameof(Index));
-            }
-            else Console.WriteLine("Not");
-            return View(user);
-        }
-
-        public IActionResult Edit(Guid id)
-        {
-            var user = _userService.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
+                var check = await userRepository.CheckUser(id);
+                return check ? 1 : 0;
             }
 
-            if (ModelState.IsValid)
+            [HttpDelete]
+            public async Task Delete(Guid id)
             {
-                try
-                {
-                    _userService.UpdateUser(user);
-                }
-                catch (Exception)
-                {
-                    if (!_userService.UserExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await userRepository.DeleteUser(id);
             }
-            return View(user);
-        }
-
-        public IActionResult Delete(Guid id)
-        {
-            var user = _userService.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
-        {
-            _userService.DeleteUser(id);
-            return RedirectToAction(nameof(Index));
         }
     }
-}

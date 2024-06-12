@@ -1,0 +1,92 @@
+﻿@using LocalChat.Core.Entities
+@using System.Security.Claims
+@inject LocalChat.Repository.Services.IUserService UserService
+@model Message
+@{
+    var messages = (ViewBag.Messages as List<Message>)?.OrderBy(m => m.SendTime).ToList();
+}
+
+<style>
+    body {
+        overflow: hidden; /* Вимкнути прокрутку сторінки */
+    }
+
+    .message-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: calc(80vh - 130px); /* Фіксована висота контейнера (висота вікна мінус висота footer та верхнього заголовка) */
+        overflow-y: auto; /* Додати прокрутку по вертикалі */
+    }
+
+    .message {
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #cceeff; /* блакитний колір фону повідомлень */
+        max-width: 70%;
+        align-self: flex-start; /* розташовуємо ліворуч */
+    }
+
+    .sent-by-user {
+        align-self: flex-end; /* розташовуємо праворуч */
+        background-color: #d9ead3; /* колір фону для повідомлень, відправлених користувачем */
+    }
+
+    .form-container {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+
+    .btn-warning {
+        flex-shrink: 0;
+    }
+</style>
+
+<h1>Повідомлення</h1>
+
+<a href="@Url.Action("Friends", "User")" class="btn btn-warning">Повернутись назад</a>
+
+<div class="message-container" id="message-container">
+    @foreach (var u in messages)
+    {
+        var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var isSentByCurrentUser = u.SenderId == currentUserId;
+        var senderName = isSentByCurrentUser ? User.Identity.Name : UserService.GetUserNameById(u.SenderId);
+        <div class="message @(isSentByCurrentUser ? "sent-by-user" : "")">
+            <div class="message-sender">
+                <span>@senderName</span>
+            </div>
+            <div class="message-text">
+                @u.Text
+            </div>
+            <div>
+                <span>@u.SendTime</span>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="form-container">
+    <form asp-action="Text" class="form-inline" style="width: 100%;">
+        <input type="hidden" asp-for="SenderId" value="@User.FindFirst(ClaimTypes.NameIdentifier).Value" />
+        <input type="hidden" asp-for="ReciverId" value="@ViewData["ReciverId"]" />
+        <input type="hidden" asp-for="SendTime" value="@DateTime.Now" />
+        <input type="text" asp-for="Text" class="form-control" placeholder="Введіть повідомлення..." />
+        <button class="btn btn-warning" type="submit">Надіслати</button>
+    </form>
+</div>
+
+<script>
+    // Автоматична прокрутка до останнього повідомлення при завантаженні сторінки
+    var messageContainer = document.getElementById("message-container");
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+</script>

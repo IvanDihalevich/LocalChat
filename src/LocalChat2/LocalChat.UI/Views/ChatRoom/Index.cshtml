@@ -1,0 +1,29 @@
+﻿@model IEnumerable<LocalChat.Core.Entities.ChatRoom>
+
+@if (Model == null && !Model.Any())
+{
+    <p>No messages found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Chat</th>
+                <th>Join</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var chatRoom in Model)
+            {
+                <tr>
+                    <td>@chatRoom.Name</td>
+                    <td>
+
+                        <a href="@Url.Action("Index", "Message", new { id = chatRoom.Id })" class="btn btn-primary glow-on-hover vidstan">Вступити в чат</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -17,7 +17,7 @@ namespace LocalChat.Core.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -28,6 +28,9 @@ namespace LocalChat.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("MessageID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -35,6 +38,13 @@ namespace LocalChat.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChatRooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3c43d36b-fb1c-4177-81c3-26ce4dffadc9"),
+                            Name = "General"
+                        });
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.ChatRoomUsers", b =>
@@ -58,6 +68,58 @@ namespace LocalChat.Core.Migrations
                     b.ToTable("ChatRoomUsers");
                 });
 
+            modelBuilder.Entity("LocalChat.Core.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.CommentReaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Reaction")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommentReactions");
+                });
+
             modelBuilder.Entity("LocalChat.Core.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -67,13 +129,13 @@ namespace LocalChat.Core.Migrations
                     b.Property<Guid?>("ChatRoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MessedgeUsersId")
+                    b.Property<Guid?>("ReciverId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("SendTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("SenderIdId")
+                    b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
@@ -84,27 +146,66 @@ namespace LocalChat.Core.Migrations
 
                     b.HasIndex("ChatRoomId");
 
-                    b.HasIndex("MessedgeUsersId");
-
-                    b.HasIndex("SenderIdId");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>
+            modelBuilder.Entity("LocalChat.Core.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<DateTime>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Likes")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.PostReaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Reaction")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("PostId");
 
-                    b.ToTable("messedgeUsers");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostReactions");
                 });
 
             modelBuilder.Entity("LocalChat.Core.Entities.User", b =>
@@ -127,15 +228,14 @@ namespace LocalChat.Core.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -175,6 +275,42 @@ namespace LocalChat.Core.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7205c45a-f04a-42e5-b103-841fa5920e24"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c4c95f3d-bc44-4f39-bd87-5fe4789248a1",
+                            Email = "admin@localchat.example",
+                            EmailConfirmed = true,
+                            FullName = "Admin User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALCHAT.EXAMPLE",
+                            NormalizedUserName = "ADMIN@LOCALCHAT.EXAMPLE",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKrRDRlnSgfn4CK//byHfv0l59r0wCrj+WqMB4t8vj5b/ORLXoTvidL9LkOJdBHS2A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d6b6b212-c5f0-4087-ade2-c8d562973de8",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@localchat.example"
+                        },
+                        new
+                        {
+                            Id = new Guid("a9f3f1ac-fbb0-402d-8516-36a0cf092220"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c00c246e-ba52-48b2-854f-e557c0417de6",
+                            Email = "user@localchat.example",
+                            EmailConfirmed = true,
+                            FullName = "Regular User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@LOCALCHAT.EXAMPLE",
+                            NormalizedUserName = "USER@LOCALCHAT.EXAMPLE",
+                            PasswordHash = "AQAAAAIAAYagAAAAECDpyue1FlgfyDR5bW/JTyK4MoORxjnIE3fDDtkSCoktLnbS6Fwf3HgZUCCL9mvsYw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "6661aac4-9b77-45b4-b32d-f2b123d42b22",
+                            TwoFactorEnabled = false,
+                            UserName = "user@localchat.example"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -203,6 +339,22 @@ namespace LocalChat.Core.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("36856ea4-f45f-45a8-9498-4563d547e476"),
+                            ConcurrencyStamp = "36856ea4-f45f-45a8-9498-4563d547e476",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("5520b1ab-80ce-4665-9d51-0056796357f4"),
+                            ConcurrencyStamp = "5520b1ab-80ce-4665-9d51-0056796357f4",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -289,6 +441,18 @@ namespace LocalChat.Core.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("7205c45a-f04a-42e5-b103-841fa5920e24"),
+                            RoleId = new Guid("36856ea4-f45f-45a8-9498-4563d547e476")
+                        },
+                        new
+                        {
+                            UserId = new Guid("a9f3f1ac-fbb0-402d-8516-36a0cf092220"),
+                            RoleId = new Guid("5520b1ab-80ce-4665-9d51-0056796357f4")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -331,34 +495,75 @@ namespace LocalChat.Core.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("LocalChat.Core.Entities.Comment", b =>
+                {
+                    b.HasOne("LocalChat.Core.Entities.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("LocalChat.Core.Entities.User", "Sender")
+                        .WithMany("Comments")
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.CommentReaction", b =>
+                {
+                    b.HasOne("LocalChat.Core.Entities.Comment", "Comment")
+                        .WithMany("CommentReactions")
+                        .HasForeignKey("CommentId");
+
+                    b.HasOne("LocalChat.Core.Entities.User", "User")
+                        .WithMany("CommentReactions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("LocalChat.Core.Entities.Message", b =>
                 {
-                    b.HasOne("LocalChat.Core.Entities.ChatRoom", null)
+                    b.HasOne("LocalChat.Core.Entities.ChatRoom", "ChatRoom")
                         .WithMany("Messages")
                         .HasForeignKey("ChatRoomId");
 
-                    b.HasOne("LocalChat.Core.Entities.MessedgeUsers", null)
-                        .WithMany("MessageId")
-                        .HasForeignKey("MessedgeUsersId");
-
-                    b.HasOne("LocalChat.Core.Entities.User", "SenderId")
+                    b.HasOne("LocalChat.Core.Entities.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderIdId")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SenderId");
+                    b.Navigation("ChatRoom");
+
+                    b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>
+            modelBuilder.Entity("LocalChat.Core.Entities.Post", b =>
                 {
-                    b.HasOne("LocalChat.Core.Entities.User", "Receiver")
+                    b.HasOne("LocalChat.Core.Entities.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SenderId");
 
-                    b.Navigation("Receiver");
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.PostReaction", b =>
+                {
+                    b.HasOne("LocalChat.Core.Entities.Post", "Post")
+                        .WithMany("PostReactions")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("LocalChat.Core.Entities.User", "User")
+                        .WithMany("PostReactions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -417,9 +622,25 @@ namespace LocalChat.Core.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("LocalChat.Core.Entities.MessedgeUsers", b =>
+            modelBuilder.Entity("LocalChat.Core.Entities.Comment", b =>
                 {
-                    b.Navigation("MessageId");
+                    b.Navigation("CommentReactions");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("PostReactions");
+                });
+
+            modelBuilder.Entity("LocalChat.Core.Entities.User", b =>
+                {
+                    b.Navigation("CommentReactions");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("PostReactions");
                 });
 #pragma warning restore 612, 618
         }
