@@ -50,10 +50,13 @@ namespace LocalChat.Repository.Services
 
             if (chatRoomToDelete != null)
             {
+                var messagesToDelete = _dbContext.Messages.Where(m => m.ChatRoomId == chatRoomId).ToList();
+                _dbContext.Messages.RemoveRange(messagesToDelete);
                 _dbContext.ChatRooms.Remove(chatRoomToDelete);
                 _dbContext.SaveChanges();
             }
         }
+
         public bool ChatRoomExists(Guid id)
         {
             return _dbContext.ChatRooms.Any(c => c.Id == id);
