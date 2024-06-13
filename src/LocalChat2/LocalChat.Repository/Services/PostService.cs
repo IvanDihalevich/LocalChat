@@ -44,13 +44,16 @@ namespace LocalChat.Repository.Services
 
         public void DeleteMessage(Guid id)
         {
-            var postToDelete = _dbContext.Posts.FirstOrDefault(m => m.Id == id);
+            var postToDelete = _dbContext.Posts
+                                        .Include(p => p.Comments) // Include comments related to the post
+                                        .Include(p => p.PostReactions) // Include reactions related to the post
+                                        .FirstOrDefault(p => p.Id == id);
+
             if (postToDelete != null)
-            {
+                _dbContext.Comments.RemoveRange(postToDelete.Comments);
+                _dbContext.PostReactions.RemoveRange(postToDelete.PostReactions);
                 _dbContext.Posts.Remove(postToDelete);
                 _dbContext.SaveChanges();
             }
         }
-
-    }
 }

@@ -1,8 +1,13 @@
 ﻿@using LocalChat.Core.Entities
+@using System.Security.Claims
 @inject LocalChat.Repository.Services.IUserService UserService
 @model IEnumerable<Post>
 
 <style>
+    body {
+        background-color: #ccffcc; /* Світло-зелений фон */
+    }
+
     .post-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -100,8 +105,15 @@
                 <div class="post-title">@post.Title</div>
                 <div class="post-text">@post.Text</div>
                 <div class="post-meta">
-                    <span>Likes: @post.Likes</span><br>
+                    @* <span>Likes: @post.Likes</span><br> *@
                     <span>User: @UserService.GetUserNameById(post.SenderId)</span><br>
+                    @if (Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value) == post.SenderId || User.IsInRole("Admin"))
+                    {
+                        <form method="post" action="@Url.Action("Delete", "Posts")">
+                            <input type="hidden" name="postId" value="@post.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    }
                     <span>Date: @post.CreateDateTime.ToString("yyyy-MM-dd")</span><br>
                     <a href="/Posts/Discussion/@post.Id">View Discussion</a>
                 </div>

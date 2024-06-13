@@ -60,47 +60,12 @@ namespace LocalChat.UI.Controllers
 
             return View(chatRoom);
         }
-        public IActionResult Delete(Guid id)
-        {
-            return View(_chatRoomService.GetChatRoomById(id));
-        }
-
-        // POST: ProjectsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Guid id, IFormCollection form)
-        {
-            try
-            {
-                _chatRoomService.DeleteChatRoom(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id });
-            }
-        }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public IActionResult Delete(Guid chatId)
         {
-            if (id == Guid.Empty)
-            {
-                return BadRequest("Invalid chat room ID.");
-            }
-
-            try
-            {
-                _chatRoomService.DeleteChatRoom(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $"An error occurred while deleting the chat room: {ex.Message}");
-                var chatRoom = _chatRoomService.GetChatRoomById(id);
-                return View("Delete", chatRoom);
-            }
+                _chatRoomService.DeleteChatRoom(chatId);
+                return RedirectToAction("Index");
         }
     }
 }

@@ -35,10 +35,18 @@ namespace LocalChat.Repository.Services
 
         public void DeleteUser(Guid userId)
         {
-            // Видалити користувача за його ідентифікатором
-            _dbContext.Users.Find(userId);
-        }
+            var user = _dbContext.Users.Find(userId);
 
+            if (user != null)
+            {
+                var userComments = _dbContext.Comments.Where(c => c.SenderId == userId).ToList();
+                var userPosts = _dbContext.Posts.Where(c => c.SenderId == userId).ToList();
+                _dbContext.Posts.RemoveRange(userPosts);
+                _dbContext.Comments.RemoveRange(userComments);
+                _dbContext.Users.Remove(user);
+                _dbContext.SaveChanges();
+            }
+        }
         public User GetUserById(Guid userId)
         {
             // Знайти користувача за його ідентифікатором

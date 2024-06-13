@@ -1,10 +1,105 @@
-﻿﻿@using LocalChat.Repository.Model
+﻿@using LocalChat.Repository.Model
 
 @model IEnumerable<UserListItemModel>
 
-<a href="/user/create" class="btn btn-primary float-end">Створити</a>
+<style>
+    body {
+        background-color: #f0f5fc;
+        font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #2196f3;
+    }
+
+    .table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #e3f2fd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table thead {
+            background-color: #2196f3; 
+            color: #fff;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #bbdefb; 
+        }
+
+        .table tr:hover {
+            background-color: #90caf9;
+        }
+
+    .btn-primary {
+        background-color: #2196f3; 
+        color: #fff;
+        border: none;
+        padding: 15px 0; 
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        width: 100%; 
+        display: block;
+        text-align: center; 
+
+        .btn-primary:hover {
+            background-color: #1976d2;
+        }
+
+    .btn-warning {
+        background-color: #ff9800; 
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #f57c00;
+        }
+
+    .btn-danger {
+        background-color: #e91e63; 
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-danger:hover {
+            background-color: #c2185b;
+        }
+
+    .modal-title {
+        color: #e91e63; 
+    }
+
+    .modal-body,
+    .modal-footer {
+        background-color: #fff; 
+    }
+</style>
+
 
 <h1>Користувачі</h1>
+<a href="/user/create" class="btn btn-primary">Додати</a>
 
 <table class="table table-bordered">
     <thead>
@@ -14,10 +109,10 @@
             {
                 <th>Email</th>
                 <th>Roles</th>
-                <th>Confirmed</th>
+                @* <th>Confirmed</th> *@
             }
             <th>Actions</th>
-        </tr> 
+        </tr>
     </thead>
     <tbody>
         @foreach (var u in Model)
@@ -26,20 +121,22 @@
                 <td>@u.FullName</td>
                 @if (User.IsInRole("Admin"))
                 {
-                <td>@u.Email</td>
+                    <td>@u.Email</td>
 
-                <td>@string.Join(", ", u.Roles)</td>
-                <td><input class="form-check-input" @(u.IsEmailConfirmed ? "checked" : "") type="checkbox" disabled></td>
-                <td>
-                    <a href="/user/edit/@u.Id" class="btn btn-warning">Edit</a>
-                    <a href="#" data-id="@u.Id" data-email="@u.Email" class="btn btn-danger btn-remove-user">Remove</a>
-                </td>
+                    <td>@string.Join(", ", u.Roles)</td>
+                    @* <td><input class="form-check-input" @(u.IsEmailConfirmed ? "checked" : "") type="checkbox" disabled></td> *@
+                    <td>
+                        <a href="/user/edit/@u.Id" class="btn btn-warning">Edit</a>
+                        <form method="post" action="@Url.Action("Delete", "User")">
+                            <input type="hidden" name="userId" value="@u.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
                 }
             </tr>
         }
     </tbody>
 </table>
-
 
 <div class="modal" tabindex="-1" id="modalError">
     <div class="modal-dialog">
@@ -52,72 +149,4 @@
                 <p>Не можливо видалити користувача <strong class="userName">-</strong>.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" tabindex="-1" id="modalQuestion">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Видалення</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Чи справді Ви бажаєте назавжди видалити користувача <strong class="userName">-</strong>?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn-primary btn btn-remove-approve">Так! Видаляємо!</a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-
-    <script>
-        $(function () {
-
-            var user_id = "";
-            var user_email = "";
-            var row = null;
-
-            $(".btn-remove-user").click(function () {
-
-                row = $(this).closest("tr");
-                user_id = $(this).attr("data-id");
-                user_email = $(this).attr("data-email");
-                $(".userName").html(user_email);
-
-                $.post("/user/checkdelete", { id: user_id }, function (data) {
-
-                    if (data == 0) {
-                        $("#modalError").modal("show");
-                    }
-                    else {
-                        $("#modalQuestion").modal("show");
-                    }
-                });
-            });
-
-            $(".btn-remove-approve").click(function () {
-
-                $.ajax({
-                    url: '/user/delete',
-                    type: 'DELETE',
-                    data: { id: user_id },
-                    success: function (result) {
-                        row.fadeOut();
-                        $("#modalQuestion").modal("hide");
-                    }
-                });
-
-            });
-
-        })
-    </script>
-
-}
+                <button type="button" class="btn btn

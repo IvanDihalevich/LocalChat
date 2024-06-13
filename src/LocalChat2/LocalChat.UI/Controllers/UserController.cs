@@ -17,12 +17,14 @@ namespace LocalChat.WebUI.Controllers
         public class UserController : Controller
         {
             private readonly IUserRepository userRepository;
-            private readonly IMessageService messageRepository;
+        private readonly IUserService _userService;
+        private readonly IMessageService messageRepository;
 
-        public UserController(IUserRepository userRepository, IMessageService _messageRepository)
+        public UserController(IUserRepository userRepository, IUserService userService, IMessageService _messageRepository)
             {
                 this.userRepository = userRepository;
-            this.messageRepository = _messageRepository;
+                _userService = userService;
+                this.messageRepository = _messageRepository;
             }
 
             [Authorize(Roles = "Admin")]
@@ -109,10 +111,11 @@ namespace LocalChat.WebUI.Controllers
                 return check ? 1 : 0;
             }
 
-            [HttpDelete]
-            public async Task Delete(Guid id)
+            [HttpPost]
+            public async Task<IActionResult> Delete(Guid userId)
             {
-                await userRepository.DeleteUser(id);
+                _userService.DeleteUser(userId);
+                return RedirectToAction("Index");
             }
         }
     }

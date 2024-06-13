@@ -114,6 +114,12 @@ namespace LocalChat.UI.Controllers
             }
             return RedirectToAction("Discussion", new { id = postId });
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid postId)
+        {
+                _postService.DeleteMessage(postId);
+            return RedirectToAction("Index", "Posts");
+        }
 
         [HttpPost]
         [Authorize]

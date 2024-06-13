@@ -2,7 +2,127 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .nav-link {
+            color:grey !important;
+            
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 40vh;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .image-card {
+            background: #ffffff;
+            border-radius: 0.25rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+            width: 300px;
+            margin-bottom: 2rem;
+        }
+
+            .image-card img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
+            .image-card:hover {
+                transform: scale(1.05);
+            }
+
+        .image-card-title {
+            padding: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .image-card-description {
+            padding: 0 1rem 1rem 1rem;
+            color: #6c757d;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+  
+
+    <div class="container main-content">
+        <h1>Welcome</h1>
+        <p>Learn about our "MI Chat" from Ivan and Max with ASP.NET Core.</p>
+    </div>
+
+    <div class="container cards-container">
+        <div class="image-card">
+            <img src="https://i.pinimg.com/564x/cf/64/93/cf6493001081f8bf9521577def32dc11.jpg" alt="Placeholder Image">
+            <div class="image-card-title">About Project </div>
+            <div class="image-card-description">Description for card 1 goes here. It provides brief information.</div>
+        </div>
+        <div class="image-card">
+            <img src="https://i.pinimg.com/564x/90/bb/ca/90bbca1ded6256e07f152619c6a186d8.jpg" alt="Placeholder Image">
+            <div class="image-card-title">News </div>
+            <div class="image-card-description">Description for card 2 goes here. It provides brief information.</div>
+        </div>
+        <div class="image-card">
+            <img src="https://i.pinimg.com/564x/57/4e/33/574e33fb4f7680fc016f6d4b53926826.jpg" alt="Placeholder Image">
+            <div class="image-card-title">Support </div>
+            <div class="image-card-description">Description for card 3 goes here. It provides brief information.</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 My Website. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
